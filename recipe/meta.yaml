@@ -12,7 +12,7 @@ source:
   - gh950.patch
 
 build:
-  number: 2
+  number: 3
   include_recipe: True
   skip: True  # [win]
 
