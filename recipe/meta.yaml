@@ -1,4 +1,4 @@
-{% set version = "2.5.0b1" %}
+{% set version = "2.5.0rc1" %}
 
 package:
   name: cantera-recipe
@@ -6,13 +6,13 @@ package:
 
 source:
   url: https://github.com/Cantera/cantera/archive/v{{ version }}.tar.gz
-  sha256: 851a508c80751667c9e433f93e63550e00923291e0f28a8bb8807568ef9fb205
+  sha256: 10ba181b20db8318a3d5957236215281a75ddc8d3f578eb464f7309f04674a28
   patches:
   # https://github.com/Cantera/cantera/pull/950
   - gh950.patch
 
 build:
-  number: 2
+  number: 0
   include_recipe: True
   skip: True  # [win]
 
