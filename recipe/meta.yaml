@@ -1,4 +1,4 @@
-{% set version = "2.5.0b1" %}
+{% set version = "2.5.0" %}
 
 package:
   name: cantera-recipe
@@ -6,13 +6,10 @@ package:
 
 source:
   url: https://github.com/Cantera/cantera/archive/v{{ version }}.tar.gz
-  sha256: 851a508c80751667c9e433f93e63550e00923291e0f28a8bb8807568ef9fb205
-  patches:
-  # https://github.com/Cantera/cantera/pull/950
-  - gh950.patch
+  sha256: 61a18311aa308d761182a2e94c6a6eb16a58a7f87dadee64a80e9dc122cef971
 
 build:
-  number: 2
+  number: 0
   include_recipe: True
   skip: True  # [win]
 
@@ -21,6 +18,7 @@ requirements:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - scons >=3.1
+    - setuptools
   host:
     - python >=3.5
     - boost-cpp
@@ -50,6 +48,7 @@ outputs:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
         - scons >=3.1
+        - setuptools
       host:
         - python >=3.5
         - boost-cpp
@@ -81,6 +80,7 @@ outputs:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
         - scons >=3.1
+        - setuptools
       host:
         - python >=3.5
         - boost-cpp
@@ -112,6 +112,7 @@ outputs:
         - {{ compiler('cxx') }}
         - scons >=3.1
         - cython
+        - setuptools
       host:
         - python {{ python }}
         - setuptools
