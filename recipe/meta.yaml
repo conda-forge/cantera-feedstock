@@ -9,7 +9,7 @@ source:
   sha256: 61a18311aa308d761182a2e94c6a6eb16a58a7f87dadee64a80e9dc122cef971
 
 build:
-  number: 0
+  number: 1
   include_recipe: True
   skip: True  # [win]
 
