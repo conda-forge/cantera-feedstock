@@ -1,4 +1,4 @@
-{% set version = "2.5.0" %}
+{% set version = "2.5.1" %}
 
 package:
   name: cantera-recipe
@@ -6,7 +6,7 @@ package:
 
 source:
   url: https://github.com/Cantera/cantera/archive/v{{ version }}.tar.gz
-  sha256: 61a18311aa308d761182a2e94c6a6eb16a58a7f87dadee64a80e9dc122cef971
+  sha256: 59f673cec686bc9b1eeccc1b1c9158a3978a3abe7491d00e8b355908c1c3be0a
 
 build:
   number: 0
