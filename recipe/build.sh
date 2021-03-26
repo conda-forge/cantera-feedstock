@@ -4,12 +4,6 @@ echo "****************************"
 echo "LIBRARY BUILD STARTED"
 echo "****************************"
 
-if [[ "$DIRTY" != "1" ]]; then
-    scons clean
-fi
-
-rm -f cantera.conf
-
 cp "${RECIPE_DIR}/cantera_base.conf" cantera.conf
 
 echo "prefix = '${PREFIX}'" >> cantera.conf
@@ -34,12 +28,7 @@ fi
 
 set -xe
 
-# FIXME REVERT BEFORE MERGING
-if ! scons build -j${CPU_COUNT}; then
-        cat config.log
-        echo "BUILD FAILED"
-        exit 1
-fi
+scons build -j${CPU_COUNT}
 
 set +xe
 
