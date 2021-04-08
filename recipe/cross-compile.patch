@@ -23,7 +23,7 @@ index 2d50f072b..bb94bb338 100644
 @@ -931,29 +931,6 @@ if env['system_fmt'] in ('n', 'default'):
                           'Try manually checking out the submodule with:\n\n'
                           '    git submodule update --init --recursive ext/fmt\n')
- 
+
 -fmt_include = '<fmt/format.h>' if env['system_fmt'] else '"../ext/fmt/include/fmt/format.h"'
 -fmt_version_source = get_expression_value([fmt_include], 'FMT_VERSION')
 -retcode, fmt_lib_version = conf.TryRun(fmt_version_source, '.cpp')
@@ -53,7 +53,7 @@ index 2d50f072b..bb94bb338 100644
 @@ -1040,13 +1017,6 @@ if env['system_eigen'] in ('n', 'default'):
                           'Try manually checking out the submodule with:\n\n'
                           '    git submodule update --init --recursive ext/eigen\n')
- 
+
 -eigen_include = '<Eigen/Core>' if env['system_eigen'] else '"../ext/eigen/Eigen/Core"'
 -eigen_versions = 'QUOTE(EIGEN_WORLD_VERSION) "." QUOTE(EIGEN_MAJOR_VERSION) "." QUOTE(EIGEN_MINOR_VERSION)'
 -eigen_version_source = get_expression_value([eigen_include], eigen_versions)
@@ -67,7 +67,7 @@ index 2d50f072b..bb94bb338 100644
 @@ -1059,13 +1029,6 @@ else:
  env['HAS_CLANG'] = conf.CheckDeclaration('__clang__', '', 'C++')
  env['HAS_OPENMP'] = conf.CheckCXXHeader('omp.h', '""')
- 
+
 -boost_version_source = get_expression_value(['<boost/version.hpp>'], 'BOOST_LIB_VERSION')
 -retcode, boost_lib_version = conf.TryRun(boost_version_source, '.cpp')
 -env['BOOST_LIB_VERSION'] = '.'.join(boost_lib_version.strip().split('_'))
@@ -81,7 +81,7 @@ index 2d50f072b..bb94bb338 100644
 @@ -1121,38 +1084,21 @@ if env['system_sundials'] == 'y':
      for subdir in ('sundials', 'nvector', 'cvodes', 'ida', 'sunlinsol', 'sunmatrix'):
          removeDirectory('include/cantera/ext/'+subdir)
- 
+
 -    # Determine Sundials version
 -    sundials_version_source = get_expression_value(['"sundials/sundials_config.h"'],
 -                                                   'QUOTE(SUNDIALS_PACKAGE_VERSION)')
@@ -128,35 +128,8 @@ index 2d50f072b..bb94bb338 100644
 +        '# include "sundials/sundials_config.h"',
 +        "C++",
 +    )
- 
+
      # In the case where a user is trying to link Cantera to an external BLAS/LAPACK
      # library, but Sundials was configured without this support, print a Warning.
--- 
+--
 2.31.1
-
-
-From b4a7a9b6f9c365682a180609f590218115b4cbe2 Mon Sep 17 00:00:00 2001
-From: Bryan Weber <bryan.w.weber@gmail.com>
-Date: Wed, 7 Apr 2021 20:38:59 -0400
-Subject: Switch to packaging to resolve pkg_resources error
-
----
- site_scons/buildutils.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/site_scons/buildutils.py b/site_scons/buildutils.py
-index 3f07470ff..3c104591a 100644
---- a/site_scons/buildutils.py
-+++ b/site_scons/buildutils.py
-@@ -16,7 +16,7 @@ import itertools
- import SCons.Errors
- import SCons
- import SCons.Node.FS
--from pkg_resources import parse_version
-+from packaging.version import parse as parse_version
- import distutils.sysconfig
- 
- try:
--- 
-2.31.1
-
