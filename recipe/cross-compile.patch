@@ -1,7 +1,7 @@
-From 7673d9d7b1921714816457948a02a457612187d4 Mon Sep 17 00:00:00 2001
+From ee24eff87183d16184e0ce8e96dc7713b73f55b6 Mon Sep 17 00:00:00 2001
 From: "Bryan W. Weber" <bryan.w.weber@gmail.com>
 Date: Sat, 3 Apr 2021 11:04:16 -0400
-Subject: [SCons] Fix LAPACK defines for SUNDIALS
+Subject: Fix LAPACK defines for SUNDIALS
 
 In SUNDIALS >= 5.5, there is no longer a define that indicates SUNDIALS
 was compiled with LAPACK globally. Instead, the specific SUNLINSOL
@@ -131,6 +131,32 @@ index 2d50f072b..bb94bb338 100644
  
      # In the case where a user is trying to link Cantera to an external BLAS/LAPACK
      # library, but Sundials was configured without this support, print a Warning.
+-- 
+2.31.1
+
+
+From b4a7a9b6f9c365682a180609f590218115b4cbe2 Mon Sep 17 00:00:00 2001
+From: Bryan Weber <bryan.w.weber@gmail.com>
+Date: Wed, 7 Apr 2021 20:38:59 -0400
+Subject: Switch to packaging to resolve pkg_resources error
+
+---
+ site_scons/buildutils.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/site_scons/buildutils.py b/site_scons/buildutils.py
+index 3f07470ff..3c104591a 100644
+--- a/site_scons/buildutils.py
++++ b/site_scons/buildutils.py
+@@ -16,7 +16,7 @@ import itertools
+ import SCons.Errors
+ import SCons
+ import SCons.Node.FS
+-from pkg_resources import parse_version
++from packaging.version import parse as parse_version
+ import distutils.sysconfig
+ 
+ try:
 -- 
 2.31.1
 
