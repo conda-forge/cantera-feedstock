@@ -123,6 +123,8 @@ outputs:
         - {{ compiler('cxx') }}
         - scons >=3.1
         - setuptools
+        - numpy                                  # [build_platform != target_platform]
+        - cython                                 # [build_platform != target_platform]
       host:
         - python {{ python }}
         - setuptools
