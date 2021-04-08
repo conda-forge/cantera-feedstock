@@ -149,6 +149,7 @@ outputs:
         - {{ pin_compatible('numpy') }}
         - h5py
         - ruamel_yaml
+        - libcantera {{ version }}
     build:
       entry_points:
         - ck2cti = cantera.ck2cti:script_entry_point
