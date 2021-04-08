@@ -9,6 +9,8 @@ cp "${RECIPE_DIR}/cantera_base.conf" cantera.conf
 if [[ "${OSX_ARCH}" == "" ]]; then
     echo "CC = '${CC}'" >> cantera.conf
     echo "CXX = '${CXX}'" >> cantera.conf
+    echo "cc_flags = '${CFLAGS}'" >> cantera.conf
+    echo "cxx_flags = '${CPPFLAGS}'" >> cantera.conf
 else
     echo "CC = '${CLANG}'" >> cantera.conf
     echo "CXX = '${CLANGXX}'" >> cantera.conf
