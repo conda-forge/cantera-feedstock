@@ -65,7 +65,7 @@ outputs:
         - yaml-cpp
         - gtest
         - gmock
-        - sundials
+        - sundials ==5.7
         - pywin32  # [win]
         - libblas
         - liblapack
@@ -99,7 +99,7 @@ outputs:
         - yaml-cpp
         - gtest
         - gmock
-        - sundials
+        - sundials ==5.7
         - pywin32  # [win]
         - libcantera {{ version }}
         - libblas
@@ -136,7 +136,7 @@ outputs:
         - yaml-cpp
         - gtest
         - gmock
-        - sundials
+        - sundials ==5.7
         - pywin32  # [win]
         - cython
         # These two are added here so that conda-build doesn't package their files into cantera too
