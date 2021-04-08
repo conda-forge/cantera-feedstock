@@ -21,7 +21,6 @@ else
     echo "CXX = '${CLANGXX}'" >> cantera.conf
     echo "cc_flags = '${CFLAGS} -isysroot ${CONDA_BUILD_SYSROOT}'" >> cantera.conf
     echo "cxx_flags = '${CPPFLAGS} -isysroot ${CONDA_BUILD_SYSROOT}'" >> cantera.conf
-    echo "blas_lapack_libs = 'lapack,blas'" >> cantera.conf
     echo "no_debug_linker_flags = '-isysroot ${CONDA_BUILD_SYSROOT}'" >> cantera.conf
 fi
 
