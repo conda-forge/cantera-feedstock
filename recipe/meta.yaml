@@ -18,16 +18,12 @@ build:
 
 requirements:
   build:
-    - python                                 # [build_platform != target_platform]
-    - cross-python_{{ target_platform }}     # [build_platform != target_platform]
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - scons >=3.1
     - setuptools
   host:
-    - python >=3.5
     - boost-cpp
-    - numpy
     - fmt
     - eigen
     - yaml-cpp
@@ -47,19 +43,13 @@ outputs:
         # only the header part of these libraries are used
         - boost-cpp
         - fmt
-        - python
     requirements:
       build:
-        - python                                 # [build_platform != target_platform]
-        - cross-python_{{ target_platform }}     # [build_platform != target_platform]
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
         - scons >=3.1
-        - setuptools
       host:
-        - python >=3.5
         - boost-cpp
-        - numpy
         - fmt
         - eigen
         - yaml-cpp
@@ -81,26 +71,19 @@ outputs:
         # only the header part of these libraries are used
         - boost-cpp
         - fmt
-        - python
     requirements:
       build:
-        - python                                 # [build_platform != target_platform]
-        - cross-python_{{ target_platform }}     # [build_platform != target_platform]
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
         - scons >=3.1
-        - setuptools
       host:
-        - python >=3.5
         - boost-cpp
-        - numpy
         - fmt
         - eigen
         - yaml-cpp
         - gtest
         - gmock
         - sundials ==5.7
-        - pywin32  # [win]
         - libcantera {{ version }}
         - libblas
         - liblapack
