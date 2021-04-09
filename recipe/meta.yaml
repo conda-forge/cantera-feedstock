@@ -48,6 +48,7 @@ outputs:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
         - scons >=3.1
+        - setuptools
       host:
         - boost-cpp
         - fmt
