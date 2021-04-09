@@ -7,14 +7,19 @@ package:
 source:
   url: https://github.com/Cantera/cantera/archive/v{{ version }}.tar.gz
   sha256: 59f673cec686bc9b1eeccc1b1c9158a3978a3abe7491d00e8b355908c1c3be0a
+  patches:
+  # https://github.com/conda-forge/cantera-feedstock/pull/13#issuecomment-809382526
+  - cross-compile.patch  # [build_platform != target_platform]
 
 build:
-  number: 0
+  number: 1
   include_recipe: True
   skip: True  # [win]
 
 requirements:
   build:
+    - python                                 # [build_platform != target_platform]
+    - cross-python_{{ target_platform }}     # [build_platform != target_platform]
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - scons >=3.1
@@ -28,7 +33,7 @@ requirements:
     - yaml-cpp
     - gtest
     - gmock
-    - sundials
+    - sundials ==5.7
     - pywin32  # [win]
     - libblas
     - liblapack
@@ -45,6 +50,8 @@ outputs:
         - python
     requirements:
       build:
+        - python                                 # [build_platform != target_platform]
+        - cross-python_{{ target_platform }}     # [build_platform != target_platform]
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
         - scons >=3.1
@@ -58,7 +65,7 @@ outputs:
         - yaml-cpp
         - gtest
         - gmock
-        - sundials
+        - sundials ==5.7
         - pywin32  # [win]
         - libblas
         - liblapack
@@ -77,6 +84,8 @@ outputs:
         - python
     requirements:
       build:
+        - python                                 # [build_platform != target_platform]
+        - cross-python_{{ target_platform }}     # [build_platform != target_platform]
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
         - scons >=3.1
@@ -90,7 +99,7 @@ outputs:
         - yaml-cpp
         - gtest
         - gmock
-        - sundials
+        - sundials ==5.7
         - pywin32  # [win]
         - libcantera {{ version }}
         - libblas
@@ -108,11 +117,14 @@ outputs:
         - fmt
     requirements:
       build:
+        - python                                 # [build_platform != target_platform]
+        - cross-python_{{ target_platform }}     # [build_platform != target_platform]
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
         - scons >=3.1
-        - cython
         - setuptools
+        - numpy                                  # [build_platform != target_platform]
+        - cython                                 # [build_platform != target_platform]
       host:
         - python {{ python }}
         - setuptools
@@ -123,7 +135,7 @@ outputs:
         - yaml-cpp
         - gtest
         - gmock
-        - sundials
+        - sundials ==5.7
         - pywin32  # [win]
         - cython
         # These two are added here so that conda-build doesn't package their files into cantera too

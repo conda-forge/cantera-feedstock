@@ -6,7 +6,7 @@ set -e
 
 test -f cantera.conf
 
-scons install
+${BUILD_PREFIX}/bin/python `which scons` install
 
 echo "****************************"
 echo "DEVEL LIBRARY INSTALL COMPLETED SUCCESSFULLY"

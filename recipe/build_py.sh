@@ -16,7 +16,7 @@ fi
 
 test -f cantera.conf
 
-scons build python_package='y' python_cmd="${PYTHON}"
+${BUILD_PREFIX}/bin/python `which scons` build python_package='y' python_cmd="${PYTHON}"
 
 echo "****************************"
 echo "PYTHON ${PY_VER} BUILD COMPLETED SUCCESSFULLY"
