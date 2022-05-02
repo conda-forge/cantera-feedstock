@@ -163,10 +163,12 @@ outputs:
         - ctml2yaml = cantera.ctml2yaml:main
       include_recipe: True
     test:
+      requires:
+        - pytest
       imports:
         - cantera
       commands:
-        - python -m unittest -v cantera.test
+        - python -m pytest --pyargs cantera.test
         - ck2cti --help
         - cti2yaml --help
         - ck2yaml --help
