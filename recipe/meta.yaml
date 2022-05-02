@@ -24,6 +24,7 @@ requirements:
     - {{ compiler('cxx') }}
     - scons >=4.1
     - setuptools
+    - pip
   host:
     - python >=3.7
     - boost-cpp
@@ -56,6 +57,7 @@ outputs:
         - {{ compiler('cxx') }}
         - scons >=4.1
         - setuptools
+        - pip
       host:
         - python >=3.7
         - boost-cpp
@@ -90,6 +92,7 @@ outputs:
         - {{ compiler('cxx') }}
         - scons >=4.1
         - setuptools
+        - pip
       host:
         - python >=3.7
         - boost-cpp
@@ -125,6 +128,7 @@ outputs:
         - setuptools
         - numpy                                  # [build_platform != target_platform]
         - cython                                 # [build_platform != target_platform]
+        - pip
       host:
         - python {{ python }}
         - setuptools
