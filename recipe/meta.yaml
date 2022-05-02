@@ -23,6 +23,7 @@ requirements:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - scons >=4.1
+    - setuptools
   host:
     - python >=3.7
     - boost-cpp
@@ -54,6 +55,7 @@ outputs:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
         - scons >=4.1
+        - setuptools
       host:
         - python >=3.7
         - boost-cpp
@@ -88,7 +90,6 @@ outputs:
         - {{ compiler('cxx') }}
         - scons >=4.1
         - setuptools
-        - pip
       host:
         - python >=3.7
         - setuptools
