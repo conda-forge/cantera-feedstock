@@ -1,31 +1,23 @@
-From ee24eff87183d16184e0ce8e96dc7713b73f55b6 Mon Sep 17 00:00:00 2001
-From: "Bryan W. Weber" <bryan.w.weber@gmail.com>
-Date: Sat, 3 Apr 2021 11:04:16 -0400
-Subject: Fix LAPACK defines for SUNDIALS
+From 1ed99f531a0baf054169065d724a892c94f683fa Mon Sep 17 00:00:00 2001
+From: Bryan Weber <bryan.w.weber@gmail.com>
+Date: Mon, 2 May 2022 18:27:03 -0500
+Subject: [PATCH] [SCons] Fix cross-compiling for v2.6.0
 
-In SUNDIALS >= 5.5, there is no longer a define that indicates SUNDIALS
-was compiled with LAPACK globally. Instead, the specific SUNLINSOL
-libraries that actually use LAPACK are listed explicitly.
-
-Remove TryRun calls from SConstruct
-
-To support cross-compiling, remove the TryRun calls. These are only
-necessary to find the versions for info output, with the exception of
-SUNDIALS which is hardcoded here.
+Cross compiling support is only available without TryRun
 ---
- SConstruct | 82 ++++++++++--------------------------------------------
- 1 file changed, 14 insertions(+), 68 deletions(-)
+ SConstruct | 47 ++---------------------------------------------
+ 1 file changed, 2 insertions(+), 45 deletions(-)
 
 diff --git a/SConstruct b/SConstruct
-index 2d50f072b..bb94bb338 100644
+index c21b2fc14..fa734995b 100644
 --- a/SConstruct
 +++ b/SConstruct
-@@ -931,29 +931,6 @@ if env['system_fmt'] in ('n', 'default'):
+@@ -1116,18 +1116,6 @@ if env['system_fmt'] in ('n', 'default'):
                           'Try manually checking out the submodule with:\n\n'
                           '    git submodule update --init --recursive ext/fmt\n')
-
+ 
 -fmt_include = '<fmt/format.h>' if env['system_fmt'] else '"../ext/fmt/include/fmt/format.h"'
--fmt_version_source = get_expression_value([fmt_include], 'FMT_VERSION')
+-fmt_version_source = get_expression_value([fmt_include], 'FMT_VERSION', ['FMT_HEADER_ONLY'])
 -retcode, fmt_lib_version = conf.TryRun(fmt_version_source, '.cpp')
 -try:
 -    fmt_lib_version = divmod(float(fmt_lib_version.strip()), 10000)
@@ -36,52 +28,43 @@ index 2d50f072b..bb94bb338 100644
 -    env['FMT_VERSION'] = '0.0.0'
 -    print('INFO: Could not find version of fmt')
 -
--# Convert setting of the deprecated system_googletest option
--if env['system_googletest'] != 'unspecified':
--    print("WARNING: The 'system_googletest' option is deprecated. "
--        "Use the 'googletest' option instead.")
--if env['system_googletest'] == 'default':
--    env['googletest'] = 'default'
--elif env['system_googletest'] == 'y':
--    env['googletest'] = 'system'
--elif env['system_googletest'] == 'n':
--    env['googletest'] = 'submodule'
--
  # Check for yaml-cpp library and checkout submodule if needed
  if env['system_yamlcpp'] in ('y', 'default'):
-     if conf.CheckCXXHeader('yaml-cpp/yaml.h', '""'):
-@@ -1040,13 +1017,6 @@ if env['system_eigen'] in ('n', 'default'):
-                          'Try manually checking out the submodule with:\n\n'
-                          '    git submodule update --init --recursive ext/eigen\n')
-
--eigen_include = '<Eigen/Core>' if env['system_eigen'] else '"../ext/eigen/Eigen/Core"'
+     # We need the Mark() function, which was added in version 0.5.3
+@@ -1223,12 +1211,6 @@ if env["system_eigen"] in ("n", "default"):
+                          "    git submodule update --init --recursive ext/eigen\n")
+     eigen_include = "'../ext/eigen/Eigen/Core'"
+ 
 -eigen_versions = 'QUOTE(EIGEN_WORLD_VERSION) "." QUOTE(EIGEN_MAJOR_VERSION) "." QUOTE(EIGEN_MINOR_VERSION)'
 -eigen_version_source = get_expression_value([eigen_include], eigen_versions)
--retcode, eigen_lib_version = conf.TryRun(eigen_version_source, '.cpp')
--env['EIGEN_LIB_VERSION'] = eigen_lib_version.strip()
--print('INFO: Found Eigen version {}'.format(env['EIGEN_LIB_VERSION']))
+-retcode, eigen_lib_version = conf.TryRun(eigen_version_source, ".cpp")
+-env["EIGEN_LIB_VERSION"] = eigen_lib_version.strip()
+-print("INFO: Found Eigen version {}".format(env["EIGEN_LIB_VERSION"]))
 -
  # Determine which standard library to link to when using Fortran to
  # compile code that links to Cantera
  if conf.CheckDeclaration('__GLIBCXX__', '#include <iostream>', 'C++'):
-@@ -1059,13 +1029,6 @@ else:
- env['HAS_CLANG'] = conf.CheckDeclaration('__clang__', '', 'C++')
- env['HAS_OPENMP'] = conf.CheckCXXHeader('omp.h', '""')
-
+@@ -1250,15 +1232,6 @@ if not env["using_apple_clang"]:
+ else:
+     env["HAS_OPENMP"] = False
+     logger.info("Not checking for OpenMP support due to using XCode compiler.")
+-
 -boost_version_source = get_expression_value(['<boost/version.hpp>'], 'BOOST_LIB_VERSION')
 -retcode, boost_lib_version = conf.TryRun(boost_version_source, '.cpp')
 -env['BOOST_LIB_VERSION'] = '.'.join(boost_lib_version.strip().split('_'))
--print('INFO: Found Boost version {0}'.format(env['BOOST_LIB_VERSION']))
 -if not env['BOOST_LIB_VERSION']:
 -    config_error("Boost could not be found. Install Boost headers or set"
 -                 " 'boost_inc_dir' to point to the boost headers.")
- # demangle is availble in Boost 1.55 or newer
+-else:
+-    print('INFO: Found Boost version {0}'.format(env['BOOST_LIB_VERSION']))
+ # demangle is available in Boost 1.56 or newer
  env['has_demangle'] = conf.CheckDeclaration("boost::core::demangle",
                                  '#include <boost/core/demangle.hpp>', 'C++')
-@@ -1121,38 +1084,21 @@ if env['system_sundials'] == 'y':
+@@ -1317,25 +1290,9 @@ env['LIBM'] = ['m'] if env['NEED_LIBM'] else []
+ if env['system_sundials'] == 'y':
      for subdir in ('sundials', 'nvector', 'cvodes', 'ida', 'sunlinsol', 'sunmatrix'):
-         removeDirectory('include/cantera/ext/'+subdir)
-
+         remove_directory('include/cantera/ext/' + subdir)
+-
 -    # Determine Sundials version
 -    sundials_version_source = get_expression_value(['"sundials/sundials_config.h"'],
 -                                                   'QUOTE(SUNDIALS_PACKAGE_VERSION)')
@@ -90,46 +73,21 @@ index 2d50f072b..bb94bb338 100644
 -        config_error("Failed to determine Sundials version.")
 -    sundials_version = sundials_version.strip(' "\n')
 -
--    # Ignore the minor version, e.g. 2.4.x -> 2.4
+-    # Ignore the minor version, for example 2.4.x -> 2.4
 -    env['sundials_version'] = '.'.join(sundials_version.split('.')[:2])
 +    env['sundials_version'] = "5.7"
      sundials_ver = parse_version(env['sundials_version'])
--    if sundials_ver < parse_version('2.4') or sundials_ver >= parse_version('6.0'):
+-    if sundials_ver < parse_version("2.4") or sundials_ver >= parse_version("7.0"):
 -        print("""ERROR: Sundials version %r is not supported.""" % env['sundials_version'])
 -        sys.exit(1)
--    elif sundials_ver > parse_version('5.7'):
+-    elif sundials_ver > parse_version("6.0"):
 -        print("WARNING: Sundials version %r has not been tested." % env['sundials_version'])
 -
 -    print("""INFO: Using system installation of Sundials version %s.""" % sundials_version)
--
--    #Determine whether or not Sundials was built with BLAS/LAPACK
--    if sundials_ver < parse_version('2.6'):
--        # In Sundials 2.4 / 2.5, SUNDIALS_BLAS_LAPACK is either 0 or 1
--        sundials_blas_lapack = get_expression_value(['"sundials/sundials_config.h"'],
--                                                       'SUNDIALS_BLAS_LAPACK')
--        retcode, has_sundials_lapack = conf.TryRun(sundials_blas_lapack, '.cpp')
--        if retcode == 0:
--            config_error("Failed to determine Sundials BLAS/LAPACK.")
--        env['has_sundials_lapack'] = int(has_sundials_lapack.strip())
--    else:
--        # In Sundials 2.6, SUNDIALS_BLAS_LAPACK is either defined or undefined
--        env['has_sundials_lapack'] = conf.CheckDeclaration('SUNDIALS_BLAS_LAPACK',
--                '#include "sundials/sundials_config.h"', 'C++')
 +    print("""INFO: Using system installation of Sundials version %s.""" % sundials_ver)
-+
-+    # In Sundials 5.5 and higher, two defines are included specific to the
-+    # SUNLINSOL packages indicating whether SUNDIALS has been built with LAPACK
-+    env["has_sundials_lapack"] = conf.CheckDeclaration(
-+        "SUNDIALS_SUNLINSOL_LAPACKBAND",
-+        '# include "sundials/sundials_config.h"',
-+        "C++",
-+    ) and conf.CheckDeclaration(
-+        "SUNDIALS_SUNLINSOL_LAPACKDENSE",
-+        '# include "sundials/sundials_config.h"',
-+        "C++",
-+    )
+ 
+     # Determine whether or not Sundials was built with BLAS/LAPACK
+     if sundials_ver < parse_version('2.6'):
+-- 
+2.36.0
 
-     # In the case where a user is trying to link Cantera to an external BLAS/LAPACK
-     # library, but Sundials was configured without this support, print a Warning.
---
-2.31.1
