@@ -1,4 +1,4 @@
-{% set version = "2.5.1" %}
+{% set version = "2.6.0" %}
 
 package:
   name: cantera-recipe
@@ -12,7 +12,7 @@ source:
   - cross-compile.patch  # [build_platform != target_platform]
 
 build:
-  number: 3
+  number: 0
   include_recipe: True
   skip: True  # [win]
 
@@ -22,10 +22,10 @@ requirements:
     - cross-python_{{ target_platform }}     # [build_platform != target_platform]
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - scons >=3.1
+    - scons >=4.1
     - setuptools
   host:
-    - python >=3.5
+    - python >=3.7
     - boost-cpp
     - numpy
     - fmt
@@ -54,10 +54,10 @@ outputs:
         - cross-python_{{ target_platform }}     # [build_platform != target_platform]
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        - scons >=3.1
+        - scons >=4.1
         - setuptools
       host:
-        - python >=3.5
+        - python >=3.7
         - boost-cpp
         - numpy
         - fmt
@@ -88,10 +88,10 @@ outputs:
         - cross-python_{{ target_platform }}     # [build_platform != target_platform]
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        - scons >=3.1
+        - scons >=4.1
         - setuptools
       host:
-        - python >=3.5
+        - python >=3.7
         - boost-cpp
         - numpy
         - fmt
@@ -121,7 +121,7 @@ outputs:
         - cross-python_{{ target_platform }}     # [build_platform != target_platform]
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        - scons >=3.1
+        - scons >=4.1
         - setuptools
         - numpy                                  # [build_platform != target_platform]
         - cython                                 # [build_platform != target_platform]
