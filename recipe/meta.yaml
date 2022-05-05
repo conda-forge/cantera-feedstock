@@ -10,11 +10,11 @@ source:
   patches:
   # https://github.com/conda-forge/cantera-feedstock/pull/13#issuecomment-809382526
   - cross-compile.patch  # [build_platform != target_platform]
+  - iomp5-macos.patch  # [osx]
 
 build:
   number: 0
   include_recipe: True
-  skip: True  # [win]
 
 requirements:
   build:
@@ -43,6 +43,7 @@ outputs:
     script: build_lib.sh  # [not win]
     script: build_lib.bat  # [win]
     build:
+      skip: True  # [win]
       ignore_run_exports_from:
         # only the header part of these libraries are used
         - boost-cpp
@@ -77,6 +78,7 @@ outputs:
     script: build_devel.sh  # [not win]
     script: build_devel.bat  # [win]
     build:
+      skip: True  # [win]
       ignore_run_exports_from:
         # only the header part of these libraries are used
         - boost-cpp
@@ -143,8 +145,8 @@ outputs:
         - pywin32  # [win]
         - cython
         # These two are added here so that conda-build doesn't package their files into cantera too
-        - libcantera-devel {{ version }}
-        - libcantera {{ version }}
+        - libcantera-devel {{ version }}  # [not win]
+        - libcantera {{ version }}  # [not win]
         - libblas
         - liblapack
       run:
@@ -153,7 +155,7 @@ outputs:
         - {{ pin_compatible('numpy') }}
         - h5py
         - ruamel_yaml
-        - libcantera {{ version }}
+        - libcantera {{ version }}  # [not win]
     build:
       entry_points:
         - ck2cti = cantera.ck2cti:script_entry_point
