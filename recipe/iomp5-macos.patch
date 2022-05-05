@@ -1,21 +1,20 @@
-From 139a3f1cd8bfc49dd192fc9e2ed84a9ed7dff868 Mon Sep 17 00:00:00 2001
+From 9013cd47fc7871b9df0e36ed3e20ec102e6065d1 Mon Sep 17 00:00:00 2001
 From: Bryan Weber <bryan.w.weber@gmail.com>
 Date: Thu, 5 May 2022 17:44:11 -0500
 Subject: [PATCH] Remove check for iomp5
 
 ---
- SConstruct | 13 -------------
- 1 file changed, 13 deletions(-)
+ SConstruct | 14 +++-----------
+ 1 file changed, 3 insertions(+), 11 deletions(-)
 
 diff --git a/SConstruct b/SConstruct
-index c21b2fc14..9cb0ae423 100644
+index d55f20fb0..f61119aef 100644
 --- a/SConstruct
 +++ b/SConstruct
-@@ -1238,19 +1238,6 @@ elif conf.CheckDeclaration('_LIBCPP_VERSION', '#include <iostream>', 'C++'):
- else:
+@@ -1203,17 +1203,9 @@ else:
      env['cxx_stdlib'] = []
  
--env['HAS_CLANG'] = conf.CheckDeclaration('__clang__', '', 'C++')
+ env['HAS_CLANG'] = conf.CheckDeclaration('__clang__', '', 'C++')
 -if not env["using_apple_clang"]:
 -    # This checks for these three libraries in order and stops when it finds the
 -    # first success. Intel = iomp5, LLVM/clang = omp, GCC = gomp. Since gomp is
@@ -27,10 +26,12 @@ index c21b2fc14..9cb0ae423 100644
 -else:
 -    env["HAS_OPENMP"] = False
 -    logger.info("Not checking for OpenMP support due to using XCode compiler.")
--
- boost_version_source = get_expression_value(['<boost/version.hpp>'], 'BOOST_LIB_VERSION')
- retcode, boost_lib_version = conf.TryRun(boost_version_source, '.cpp')
- env['BOOST_LIB_VERSION'] = '.'.join(boost_lib_version.strip().split('_'))
++
++env["HAS_OPENMP"] = False
++
+ # demangle is available in Boost 1.56 or newer
+ env['has_demangle'] = conf.CheckDeclaration("boost::core::demangle",
+                                 '#include <boost/core/demangle.hpp>', 'C++')
 -- 
 2.36.0
 
