@@ -1,18 +1,43 @@
-From 1ed99f531a0baf054169065d724a892c94f683fa Mon Sep 17 00:00:00 2001
+From bfc17981c63bb271df7351b7027ac76e1e3887f7 Mon Sep 17 00:00:00 2001
 From: Bryan Weber <bryan.w.weber@gmail.com>
 Date: Mon, 2 May 2022 18:27:03 -0500
-Subject: [PATCH] [SCons] Fix cross-compiling for v2.6.0
+Subject: [PATCH] Fix cross-compiling for v2.6.0
 
 Cross compiling support is only available without TryRun
 ---
- SConstruct | 47 ++---------------------------------------------
- 1 file changed, 2 insertions(+), 45 deletions(-)
+ SConstruct | 65 ++----------------------------------------------------
+ 1 file changed, 2 insertions(+), 63 deletions(-)
 
 diff --git a/SConstruct b/SConstruct
-index c21b2fc14..fa734995b 100644
+index c21b2fc14..d55f20fb0 100644
 --- a/SConstruct
 +++ b/SConstruct
-@@ -1116,18 +1116,6 @@ if env['system_fmt'] in ('n', 'default'):
+@@ -1070,24 +1070,6 @@ def get_expression_value(includes, expression, defines=()):
+               '}\n'))
+     return '\n'.join(s)
+ 
+-# Check that libraries link correctly
+-cmath_check_source = get_expression_value(["<cmath>"], "cos(0. * argc)")
+-retcode, cmath_works = conf.TryRun(cmath_check_source, ".cpp")
+-if cmath_works.strip() != "1":
+-    config_error(
+-        "The C++ compiler is not correctly configured (failed at linking stage)."
+-    )
+-
+-# Check that NaN is treated correctly
+-nan_check_source = get_expression_value(["<cmath>"], "std::isnan(NAN + argc)")
+-retcode, nan_works = conf.TryRun(nan_check_source, ".cpp")
+-if nan_works.strip() != "1":
+-    config_error(
+-        "Cantera requires a working implementation of 'std::isnan'.\n"
+-        "If you have specified '-ffast-math' or equivalent as an optimization option,\n"
+-        "either remove this option or add the '-fno-finite-math-only option'."
+-    )
+-
+ # Check for fmt library and checkout submodule if needed
+ # Test for 'ostream.h' to ensure that version >= 3.0.0 is available
+ if env['system_fmt'] in ('y', 'default'):
+@@ -1116,18 +1098,6 @@ if env['system_fmt'] in ('n', 'default'):
                           'Try manually checking out the submodule with:\n\n'
                           '    git submodule update --init --recursive ext/fmt\n')
  
@@ -31,7 +56,7 @@ index c21b2fc14..fa734995b 100644
  # Check for yaml-cpp library and checkout submodule if needed
  if env['system_yamlcpp'] in ('y', 'default'):
      # We need the Mark() function, which was added in version 0.5.3
-@@ -1223,12 +1211,6 @@ if env["system_eigen"] in ("n", "default"):
+@@ -1223,12 +1193,6 @@ if env["system_eigen"] in ("n", "default"):
                           "    git submodule update --init --recursive ext/eigen\n")
      eigen_include = "'../ext/eigen/Eigen/Core'"
  
@@ -44,7 +69,7 @@ index c21b2fc14..fa734995b 100644
  # Determine which standard library to link to when using Fortran to
  # compile code that links to Cantera
  if conf.CheckDeclaration('__GLIBCXX__', '#include <iostream>', 'C++'):
-@@ -1250,15 +1232,6 @@ if not env["using_apple_clang"]:
+@@ -1250,15 +1214,6 @@ if not env["using_apple_clang"]:
  else:
      env["HAS_OPENMP"] = False
      logger.info("Not checking for OpenMP support due to using XCode compiler.")
@@ -60,7 +85,7 @@ index c21b2fc14..fa734995b 100644
  # demangle is available in Boost 1.56 or newer
  env['has_demangle'] = conf.CheckDeclaration("boost::core::demangle",
                                  '#include <boost/core/demangle.hpp>', 'C++')
-@@ -1317,25 +1290,9 @@ env['LIBM'] = ['m'] if env['NEED_LIBM'] else []
+@@ -1317,25 +1272,9 @@ env['LIBM'] = ['m'] if env['NEED_LIBM'] else []
  if env['system_sundials'] == 'y':
      for subdir in ('sundials', 'nvector', 'cvodes', 'ida', 'sunlinsol', 'sunmatrix'):
          remove_directory('include/cantera/ext/' + subdir)
