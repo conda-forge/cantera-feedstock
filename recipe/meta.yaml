@@ -1,4 +1,4 @@
-{% set version = "2.5.1" %}
+{% set version = "2.6.0" %}
 
 package:
   name: cantera-recipe
@@ -6,15 +6,16 @@ package:
 
 source:
   url: https://github.com/Cantera/cantera/archive/v{{ version }}.tar.gz
-  sha256: 59f673cec686bc9b1eeccc1b1c9158a3978a3abe7491d00e8b355908c1c3be0a
+  sha256: 7273622ea76a53373cee820f939613b15eea3dd83db6e1b127c5ed043f77dc5b
   patches:
   # https://github.com/conda-forge/cantera-feedstock/pull/13#issuecomment-809382526
   - cross-compile.patch  # [build_platform != target_platform]
+  - iomp5-macos.patch  # [osx and not arm64]
 
 build:
-  number: 3
+  number: 0
   include_recipe: True
-  skip: True  # [win]
+  skip: True  # [win or ppc64le]
 
 requirements:
   build:
@@ -22,10 +23,10 @@ requirements:
     - cross-python_{{ target_platform }}     # [build_platform != target_platform]
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - scons >=3.1
+    - scons >=4.1
     - setuptools
   host:
-    - python >=3.5
+    - python >=3.7
     - boost-cpp
     - numpy
     - fmt
@@ -43,6 +44,7 @@ outputs:
     script: build_lib.sh  # [not win]
     script: build_lib.bat  # [win]
     build:
+      skip: True  # [win]
       ignore_run_exports_from:
         # only the header part of these libraries are used
         - boost-cpp
@@ -54,10 +56,10 @@ outputs:
         - cross-python_{{ target_platform }}     # [build_platform != target_platform]
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        - scons >=3.1
+        - scons >=4.1
         - setuptools
       host:
-        - python >=3.5
+        - python >=3.7
         - boost-cpp
         - numpy
         - fmt
@@ -77,6 +79,7 @@ outputs:
     script: build_devel.sh  # [not win]
     script: build_devel.bat  # [win]
     build:
+      skip: True  # [win]
       ignore_run_exports_from:
         # only the header part of these libraries are used
         - boost-cpp
@@ -88,10 +91,12 @@ outputs:
         - cross-python_{{ target_platform }}     # [build_platform != target_platform]
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        - scons >=3.1
+        - scons >=4.1
         - setuptools
       host:
-        - python >=3.5
+        - python >=3.7
+        - setuptools
+        - pip
         - boost-cpp
         - numpy
         - fmt
@@ -121,12 +126,14 @@ outputs:
         - cross-python_{{ target_platform }}     # [build_platform != target_platform]
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        - scons >=3.1
+        - scons >=4.1
         - setuptools
         - numpy                                  # [build_platform != target_platform]
         - cython                                 # [build_platform != target_platform]
+        - pip
       host:
         - python {{ python }}
+        - pip
         - setuptools
         - boost-cpp
         - numpy
@@ -139,8 +146,8 @@ outputs:
         - pywin32  # [win]
         - cython
         # These two are added here so that conda-build doesn't package their files into cantera too
-        - libcantera-devel {{ version }}
-        - libcantera {{ version }}
+        - libcantera-devel {{ version }}  # [not win]
+        - libcantera {{ version }}  # [not win]
         - libblas
         - liblapack
       run:
@@ -149,7 +156,7 @@ outputs:
         - {{ pin_compatible('numpy') }}
         - h5py
         - ruamel_yaml
-        - libcantera {{ version }}
+        - libcantera {{ version }}  # [not win]
     build:
       entry_points:
         - ck2cti = cantera.ck2cti:script_entry_point
@@ -159,10 +166,12 @@ outputs:
         - ctml2yaml = cantera.ctml2yaml:main
       include_recipe: True
     test:
+      requires:
+        - pytest
       imports:
         - cantera
       commands:
-        - python -m unittest -v cantera.test
+        - python -m pytest --pyargs cantera.test
         - ck2cti --help
         - cti2yaml --help
         - ck2yaml --help
