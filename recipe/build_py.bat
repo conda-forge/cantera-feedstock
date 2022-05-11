@@ -10,7 +10,6 @@ DEL /F cantera.conf.bak
 ECHO python_package='full' >> cantera.conf
 SET "ESC_PYTHON=%PYTHON:\=/%"
 ECHO python_cmd="%ESC_PYTHON%" >> cantera.conf
-
 CALL scons build
 IF ERRORLEVEL 1 EXIT 1
 
@@ -18,6 +17,5 @@ echo ****************************
 echo PYTHON %PYTHON% BUILD COMPLETED SUCCESSFULLY
 echo ****************************
 
-cd interfaces/cython
-"%PYTHON%" setup.py build --build-lib=../../build/python install
+"%PYTHON%" -m pip install --no-deps --find-links=build\python\dist\ cantera
 IF ERRORLEVEL 1 EXIT 1

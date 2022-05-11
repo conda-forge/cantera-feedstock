@@ -13,9 +13,8 @@ source:
   - iomp5-macos.patch  # [osx and not arm64]
 
 build:
-  number: 2
+  number: 3
   include_recipe: True
-  skip: True  # [win]
 
 requirements:
   build:
@@ -44,7 +43,6 @@ outputs:
     script: build_lib.sh  # [not win]
     script: build_lib.bat  # [win]
     build:
-      skip: True  # [win]
       ignore_run_exports_from:
         # only the header part of these libraries are used
         - boost-cpp
@@ -79,7 +77,6 @@ outputs:
     script: build_devel.sh  # [not win]
     script: build_devel.bat  # [win]
     build:
-      skip: True  # [win]
       ignore_run_exports_from:
         # only the header part of these libraries are used
         - boost-cpp
@@ -189,7 +186,9 @@ about:
   license_family: BSD
   license_file: License.txt
   dev_url: https://github.com/cantera/cantera
-  description: Cantera is an open-source suite of tools for problems involving chemical kinetics, thermodynamics, and transport processes
+  description: >
+    Cantera is an open-source suite of tools for problems involving chemical kinetics,
+    thermodynamics, and transport processes
   doc_url: https://cantera.org/documentation
 
 extra:
