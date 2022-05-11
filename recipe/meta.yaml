@@ -171,15 +171,12 @@ outputs:
     test:
       requires:
         - pytest
-        - pip
       imports:
         - cantera
       commands:
-        #- python -m pytest --pyargs cantera.test  # [not ppc64le]
+        - python -m pytest --pyargs cantera.test  # [not ppc64le]
         # "test_fluxes" fails on ppc64le for unknown reasons
-        #- python -m pytest --pyargs cantera.test -k "not test_fluxes"  # [ppc64le]
-        - python -m pip freeze
-        - python -m pip freeze | grep Cantera | grep {{ version }}  # [not win]
+        - python -m pytest --pyargs cantera.test -k "not test_fluxes"  # [ppc64le]
         - ck2cti --help
         - cti2yaml --help
         - ck2yaml --help
