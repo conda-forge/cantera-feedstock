@@ -133,10 +133,10 @@ outputs:
         - setuptools
         - numpy                                  # [build_platform != target_platform]
         - cython                                 # [build_platform != target_platform]
-        - pip
+        - pip <=22.0
       host:
         - python {{ python }}
-        - pip
+        - pip <=22.0
         - setuptools
         - boost-cpp
         - numpy
