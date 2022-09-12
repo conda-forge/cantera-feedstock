@@ -13,7 +13,7 @@ source:
   - iomp5-macos.patch  # [osx and not arm64]
 
 build:
-  number: 3
+  number: 4
   include_recipe: True
   skip: True  # [win]
 
