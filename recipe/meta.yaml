@@ -11,9 +11,11 @@ source:
   # https://github.com/conda-forge/cantera-feedstock/pull/13#issuecomment-809382526
   - cross-compile.patch  # [build_platform != target_platform]
   - iomp5-macos.patch  # [osx and not arm64]
+  # Unnecessary after 2.6.0:
+  - 1326.diff
 
 build:
-  number: 4
+  number: 5
   include_recipe: True
   skip: True  # [win]
 
