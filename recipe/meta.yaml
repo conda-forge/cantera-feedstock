@@ -15,7 +15,7 @@ source:
   - 1326.diff
 
 build:
-  number: 5
+  number: 6
   include_recipe: True
   skip: True  # [win]
 
