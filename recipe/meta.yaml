@@ -50,7 +50,6 @@ outputs:
       ignore_run_exports_from:
         # only the header part of these libraries are used
         - boost-cpp
-        - fmt
         - python
     requirements:
       build:
@@ -89,7 +88,6 @@ outputs:
       ignore_run_exports_from:
         # only the header part of these libraries are used
         - boost-cpp
-        - fmt
         - python
     requirements:
       build:
@@ -128,7 +126,6 @@ outputs:
       ignore_run_exports_from:
         # only the header part of these libraries are used
         - boost-cpp
-        - fmt
     requirements:
       build:
         - python                                 # [build_platform != target_platform]
