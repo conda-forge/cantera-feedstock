@@ -11,6 +11,7 @@ source:
   # https://github.com/conda-forge/cantera-feedstock/pull/13#issuecomment-809382526
   - cross-compile.patch  # [build_platform != target_platform]
   - iomp5-macos.patch  # [osx and not arm64]
+  - configure-hdf5.patch  # [build_platform != target_platform]
 
 build:
   number: 0
@@ -35,8 +36,8 @@ requirements:
     - gtest
     - gmock
     - sundials ==6.6
-    - hdf5
-    - highfive
+    - hdf5 >=1.14
+    - highfive >=2.7
     - pywin32  # [win]
     - libblas
     - liblapack
@@ -69,13 +70,13 @@ outputs:
         - gtest
         - gmock
         - sundials ==6.6
-        - hdf5
-        - highfive
+        - hdf5 >=1.14
+        - highfive >=2.7
         - pywin32  # [win]
         - libblas
         - liblapack
       run:
-        - hdf5
+        - hdf5 >=1.14
     test:
       commands:
         - test -f $PREFIX/lib/libcantera${SHLIB_EXT}  # [not win]
