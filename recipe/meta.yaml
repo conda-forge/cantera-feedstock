@@ -1,4 +1,4 @@
-{% set version = "2.6.0" %}
+{% set version = "3.0.0b1" %}
 
 package:
   name: cantera-recipe
@@ -6,16 +6,14 @@ package:
 
 source:
   url: https://github.com/Cantera/cantera/archive/v{{ version }}.tar.gz
-  sha256: 7273622ea76a53373cee820f939613b15eea3dd83db6e1b127c5ed043f77dc5b
+  sha256: d574ba44bb647dbca9418e9571ab7973560a366e420fc846ac848134d5bceee3
   patches:
   # https://github.com/conda-forge/cantera-feedstock/pull/13#issuecomment-809382526
   - cross-compile.patch  # [build_platform != target_platform]
   - iomp5-macos.patch  # [osx and not arm64]
-  # Unnecessary after 2.6.0:
-  - 1326.diff
 
 build:
-  number: 5
+  number: 0
   include_recipe: True
   skip: True  # [win]
 
