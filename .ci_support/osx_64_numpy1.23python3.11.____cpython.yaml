@@ -1,11 +1,11 @@
 MACOSX_DEPLOYMENT_TARGET:
-- '10.15'
+- '10.9'
 boost_cpp:
 - 1.78.0
 c_compiler:
 - clang
 c_compiler_version:
-- '14'
+- '15'
 channel_sources:
 - conda-forge
 channel_targets:
@@ -13,9 +13,11 @@ channel_targets:
 cxx_compiler:
 - clangxx
 cxx_compiler_version:
-- '14'
+- '15'
 fmt:
 - '9'
+hdf5:
+- 1.12.2
 libblas:
 - 3.9 *netlib
 liblapack:
