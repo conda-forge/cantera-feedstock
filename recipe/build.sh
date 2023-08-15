@@ -15,13 +15,11 @@ if [[ "${OSX_ARCH}" == "" ]]; then
     echo "CC = '${CC}'" >> cantera.conf
     echo "CXX = '${CXX}'" >> cantera.conf
     echo "cc_flags = '${CFLAGS}'" >> cantera.conf
-    echo "cxx_flags = '${CPPFLAGS}'" >> cantera.conf
 else
     echo ${PREFIX}
     echo "CC = '${CLANG}'" >> cantera.conf
     echo "CXX = '${CLANGXX}'" >> cantera.conf
     echo "cc_flags = '${CFLAGS} -isysroot ${CONDA_BUILD_SYSROOT}'" >> cantera.conf
-    echo "cxx_flags = '${CPPFLAGS} -isysroot ${CONDA_BUILD_SYSROOT}'" >> cantera.conf
     echo "no_debug_linker_flags = '-isysroot ${CONDA_BUILD_SYSROOT}'" >> cantera.conf
 fi
 
