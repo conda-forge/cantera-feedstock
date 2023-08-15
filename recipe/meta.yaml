@@ -34,7 +34,7 @@ requirements:
     - yaml-cpp
     - gtest
     - gmock
-    - sundials ==5.7
+    - sundials ==6.6
     - hdf5
     - highfive
     - pywin32  # [win]
@@ -68,7 +68,7 @@ outputs:
         - yaml-cpp
         - gtest
         - gmock
-        - sundials ==5.7
+        - sundials ==6.6
         - hdf5
         - highfive
         - pywin32  # [win]
@@ -108,7 +108,7 @@ outputs:
         - yaml-cpp
         - gtest
         - gmock
-        - sundials ==5.7
+        - sundials ==6.6
         - pywin32  # [win]
         - libcantera {{ version }}
         - libblas
@@ -148,7 +148,7 @@ outputs:
         - yaml-cpp
         - gtest
         - gmock
-        - sundials ==5.7
+        - sundials ==6.6
         - pywin32  # [win]
         - cython
         # These two are added here so that conda-build doesn't package their files into cantera too
