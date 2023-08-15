@@ -11,7 +11,11 @@ ECHO python_package='full' >> cantera.conf
 SET "ESC_PYTHON=%PYTHON:\=/%"
 ECHO python_cmd="%ESC_PYTHON%" >> cantera.conf
 
-CALL scons build
+:: Set the number of CPUs to use in building
+SET /A CPU_USE=%CPU_COUNT% / 2
+IF %CPU_USE% EQU 0 SET CPU_USE=1
+
+CALL scons build -j%CPU_USE%
 IF ERRORLEVEL 1 EXIT 1
 
 echo ****************************

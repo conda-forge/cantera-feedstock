@@ -13,7 +13,7 @@ if [ -d "build/python" ]; then
     rm $PREFIX/bin/ctml2yaml || true
 fi
 
-${BUILD_PREFIX}/bin/python `which scons` build python_package='y' python_cmd="${PYTHON}"
+${BUILD_PREFIX}/bin/python `which scons` build python_package='y' python_cmd="${PYTHON}" -j${CPU_COUNT}
 
 $PYTHON -m pip install --no-deps build/python
 
