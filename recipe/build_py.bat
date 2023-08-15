@@ -21,3 +21,6 @@ echo ****************************
 cd interfaces/cython
 "%PYTHON%" setup.py build --build-lib=../../build/python install
 IF ERRORLEVEL 1 EXIT 1
+
+:: Plugin library for loading Cantera Python extensions from C++
+copy "%SRC_DIR%\build\lib\cantera_python*.dll" "%PREFIX%\Library\bin\"
