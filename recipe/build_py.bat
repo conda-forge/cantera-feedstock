@@ -28,3 +28,6 @@ IF ERRORLEVEL 1 EXIT 1
 
 :: Plugin library for loading Cantera Python extensions from C++
 copy "%SRC_DIR%\build\lib\cantera_python*.dll" "%PREFIX%\Library\bin\"
+
+:: Conda environment handles library path, so no need to co-install cantera.dll
+del /f "%PREFIX%\Lib\site-packages\cantera\cantera.dll"
