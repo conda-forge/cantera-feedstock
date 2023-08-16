@@ -114,6 +114,8 @@ outputs:
         - libblas
         - liblapack
       run:
+        - eigen
+        - fmt
         - libcantera {{ version }}
     test:
       requires:
