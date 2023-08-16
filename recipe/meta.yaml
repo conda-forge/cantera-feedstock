@@ -165,11 +165,10 @@ outputs:
         - libcantera {{ version }}  # [not win]
     build:
       entry_points:
-        - ck2cti = cantera.ck2cti:script_entry_point
-        - ctml_writer = cantera.ctml_writer:main
         - ck2yaml = cantera.ck2yaml:script_entry_point
         - cti2yaml = cantera.cti2yaml:main
         - ctml2yaml = cantera.ctml2yaml:main
+        - yaml2ck = cantera.yaml2ck:main
       include_recipe: True
     test:
       requires:
@@ -185,10 +184,10 @@ outputs:
         - python -m pytest -vv test/python  # [not ppc64le]
         # "test_fluxes" fails on ppc64le for unknown reasons
         - python -m pytest -vv test/python -k "not test_fluxes"  # [ppc64le]
-        - ck2cti --help
         - cti2yaml --help
         - ck2yaml --help
         - ctml2yaml --help
+        - yaml2ck --help
 
 about:
   home: https://cantera.org
