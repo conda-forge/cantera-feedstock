@@ -13,6 +13,7 @@ source:
   - cross-compile.patch  # [build_platform != target_platform]
   - iomp5-macos.patch  # [osx and not arm64]
   - configure-hdf5.patch  # [build_platform != target_platform]
+  - test-tolerances.patch  # [ppc64le]
 
 build:
   number: 0
