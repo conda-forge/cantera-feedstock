@@ -177,10 +177,14 @@ outputs:
         - pint
       imports:
         - cantera
+      source_files:
+        - test/python
+        - test/data
+        - data
       commands:
-        - python -m pytest --pyargs cantera.test  # [not ppc64le]
+        - python -m pytest -vv test/python  # [not ppc64le]
         # "test_fluxes" fails on ppc64le for unknown reasons
-        - python -m pytest --pyargs cantera.test -k "not test_fluxes"  # [ppc64le]
+        - python -m pytest -vv test/python -k "not test_fluxes"  # [ppc64le]
         - ck2cti --help
         - cti2yaml --help
         - ck2yaml --help
