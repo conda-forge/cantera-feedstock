@@ -1,18 +1,18 @@
-From b3a6c6b77a5988c9238b500a8feeaa415df68774 Mon Sep 17 00:00:00 2001
+From 6de663fc529a2626a1f5a2e8cbd1f468960a4801 Mon Sep 17 00:00:00 2001
 From: Ray Speth <speth@mit.edu>
 Date: Tue, 15 Aug 2023 18:44:27 -0400
-Subject: [PATCH] Enable cross-compiling for v3.0.0
+Subject: [PATCH 1/4] Enable cross-compiling for v3.0.0
 
 Cross compiling support is only available without TryRun
 ---
- SConstruct | 92 +-----------------------------------------------------
- 1 file changed, 1 insertion(+), 91 deletions(-)
+ SConstruct | 109 ++++-------------------------------------------------
+ 1 file changed, 7 insertions(+), 102 deletions(-)
 
 diff --git a/SConstruct b/SConstruct
-index 6c813b76f..7588630f3 100644
+index 009bdb831..a76f88a96 100644
 --- a/SConstruct
 +++ b/SConstruct
-@@ -1163,24 +1163,6 @@ def get_expression_value(includes, expression, defines=()):
+@@ -1166,29 +1166,12 @@ def get_expression_value(includes, expression, defines=()):
                '}\n'))
      return '\n'.join(s)
  
@@ -34,31 +34,47 @@ index 6c813b76f..7588630f3 100644
 -        "either remove this option or add the '-fno-finite-math-only option'."
 -    )
 -
+-def split_version(version):
+-    """Split integer version into version string."""
+-    version = divmod(float(version.strip()), 10000)
+-    (fmt_maj, (fmt_min, fmt_pat)) = version[0], divmod(version[1], 100)
+-    return f"{fmt_maj:.0f}.{fmt_min:.0f}.{fmt_pat:.0f}"
++# Check for fmt library and checkout submodule if needed
++# Test for 'ostream.h' to ensure that version >= 3.0.0 is available
++if env['system_fmt'] in ('y', 'default'):
++    if conf.CheckCXXHeader('fmt/ostream.h', '""'):
++        env['system_fmt'] = True
++        logger.info("Using system installation of fmt library.")
+ 
  # Check for fmt library and checkout submodule if needed
- # Test for 'ostream.h' to ensure that version >= 3.0.0 is available
  if env['system_fmt'] in ('y', 'default'):
-@@ -1209,18 +1191,6 @@ if env['system_fmt'] in ('n', 'default'):
+@@ -1228,23 +1211,6 @@ if env['system_fmt'] in ('n', 'default'):
                           'Try manually checking out the submodule with:\n\n'
                           '    git submodule update --init --recursive ext/fmt\n')
  
--fmt_include = '<fmt/format.h>' if env['system_fmt'] else '"../ext/fmt/include/fmt/format.h"'
--fmt_version_source = get_expression_value([fmt_include], 'FMT_VERSION', ['FMT_HEADER_ONLY'])
--retcode, fmt_lib_version = conf.TryRun(fmt_version_source, '.cpp')
--try:
--    fmt_lib_version = divmod(float(fmt_lib_version.strip()), 10000)
--    (fmt_maj, (fmt_min, fmt_pat)) = fmt_lib_version[0], divmod(fmt_lib_version[1], 100)
--    env['FMT_VERSION'] = '{major:.0f}.{minor:.0f}.{patch:.0f}'.format(major=fmt_maj, minor=fmt_min, patch=fmt_pat)
--    logger.info(f"Found fmt version {env['FMT_VERSION']}")
--except ValueError:
--    env['FMT_VERSION'] = '0.0.0'
--    logger.info("INFO: Could not find version of fmt")
+-    fmt_version_source = get_expression_value(
+-        ['"../ext/fmt/include/fmt/format.h"'], 'FMT_VERSION', ['FMT_HEADER_ONLY'])
+-    retcode, fmt_lib_version = conf.TryRun(fmt_version_source, '.cpp')
+-    if not retcode:
+-        config_error('Expected private installation of fmt library, but it is '
+-            'not configured correctly.')
+-
+-    fmt_lib_version = split_version(fmt_lib_version)
+-    env['system_fmt'] = False
+-    logger.info(f"Using private installation of fmt library.")
+-
+-if env["OS"] == "Windows" and parse_version(fmt_lib_version) < parse_version("8.0.0"):
+-    # Workaround for symbols not exported on Windows in older fmt versions
+-    env.Append(CPPDEFINES={"FMT_HEADER_ONLY": 1})
+-
+-logger.info(f"Using fmt version {fmt_lib_version}")
 -
  # Check for yaml-cpp library and checkout submodule if needed
  if env['system_yamlcpp'] in ('y', 'default'):
      # We need the Mark() function, which was added in version 0.5.3
-@@ -1316,12 +1286,6 @@ if env["system_eigen"] in ("n", "default"):
+@@ -1340,12 +1306,6 @@ if env["system_eigen"] in ("n", "default"):
                           "    git submodule update --init --recursive ext/eigen\n")
-     eigen_include = "'../ext/eigen/Eigen/Core'"
+     eigen_include = '"../ext/eigen/Eigen/Core"'
  
 -eigen_versions = 'QUOTE(EIGEN_WORLD_VERSION) "." QUOTE(EIGEN_MAJOR_VERSION) "." QUOTE(EIGEN_MINOR_VERSION)'
 -eigen_version_source = get_expression_value([eigen_include], eigen_versions)
@@ -69,7 +85,7 @@ index 6c813b76f..7588630f3 100644
  # Determine which standard library to link to when using Fortran to
  # compile code that links to Cantera
  if conf.CheckDeclaration('__GLIBCXX__', '#include <iostream>', 'C++'):
-@@ -1344,18 +1308,6 @@ else:
+@@ -1368,19 +1328,6 @@ else:
      env["HAS_OPENMP"] = False
      logger.info("Not checking for OpenMP support due to using XCode compiler.")
  
@@ -81,14 +97,15 @@ index 6c813b76f..7588630f3 100644
 -                 " 'boost_inc_dir' to point to the boost headers.")
 -else:
 -    logger.info(f"Found Boost version {env['BOOST_LIB_VERSION']}")
--if parse_version(env['BOOST_LIB_VERSION']) < parse_version("1.61"):
--    # dll support is available in Boost 1.61 or newer
--    config_error("Cantera requires Boost version 1.61 or newer.")
+-if parse_version(env['BOOST_LIB_VERSION']) < parse_version("1.70"):
+-    # Boost.DLL with std::filesystem (making it header-only) is available in Boost 1.70
+-    # or newer
+-    config_error("Cantera requires Boost version 1.70 or newer.")
 -
  # check BLAS/LAPACK installations
  if env["system_blas_lapack"] == "n":
      env["blas_lapack_libs"] = []
-@@ -1396,32 +1348,6 @@ elif env["system_blas_lapack"] == "default":
+@@ -1421,32 +1368,6 @@ elif env["system_blas_lapack"] == "default":
      if not env["blas_lapack_libs"] and env["OS"] != "Darwin":
          logger.info("No system BLAS/LAPACK libraries detected.")
  
@@ -121,7 +138,7 @@ index 6c813b76f..7588630f3 100644
  import SCons.Conftest, SCons.SConf
  context = SCons.SConf.CheckContext(conf)
  
-@@ -1477,24 +1403,8 @@ if env['system_sundials'] == 'y':
+@@ -1502,24 +1423,8 @@ if env['system_sundials'] == 'y':
                     'sunnonlinsol'):
          remove_directory('include/cantera/ext/' + subdir)
  
@@ -140,7 +157,7 @@ index 6c813b76f..7588630f3 100644
 -    if sundials_ver < parse_version("3.0") or sundials_ver >= parse_version("7.0"):
 -        logger.error(f"Sundials version {env['sundials_version']!r} is not supported.")
 -        sys.exit(1)
--    elif sundials_ver > parse_version("6.4.1"):
+-    elif sundials_ver > parse_version("6.6.0"):
 -        logger.warning(f"Sundials version {env['sundials_version']!r} has not been tested.")
 -
 -    logger.info(f"Using system installation of Sundials version {sundials_version!r}.")

@@ -5,8 +5,9 @@ package:
   version: {{ version }}
 
 source:
-  url: https://github.com/Cantera/cantera/archive/v{{ version }}.tar.gz
-  sha256: d574ba44bb647dbca9418e9571ab7973560a366e420fc846ac848134d5bceee3
+  # url: https://github.com/Cantera/cantera/archive/v{{ version }}.tar.gz
+  url: https://github.com/Cantera/cantera/archive/43fca5354.tar.gz
+  sha256: e267b3a2dfd064af65155a8987972ee2287eda2e42f5d2d8f78699da68679454
   patches:
   # https://github.com/conda-forge/cantera-feedstock/pull/13#issuecomment-809382526
   - cross-compile.patch  # [build_platform != target_platform]
