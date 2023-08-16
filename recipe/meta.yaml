@@ -79,6 +79,7 @@ outputs:
         - hdf5 >=1.14
     test:
       commands:
+        - cat ${CONDA_PREFIX}/conda-meta/libcantera-3.*.json
         - test -f $PREFIX/lib/libcantera${SHLIB_EXT}  # [not win]
 
   - name: libcantera-devel
@@ -128,6 +129,7 @@ outputs:
       files:
         - test-lib
       commands:
+        - cat ${CONDA_PREFIX}/conda-meta/libcantera-devel-*.json
         - test -f $PREFIX/include/cantera/transport.h  # [not win]
         - ./test-lib/test-samples.sh  # [not win]
 
@@ -192,6 +194,7 @@ outputs:
         - test/data
         - data
       commands:
+        - cat ${CONDA_PREFIX}/conda-meta/cantera-*.json
         - python -m pytest -vv test/python  # [not ppc64le]
         # "test_fluxes" fails on ppc64le for unknown reasons
         - python -m pytest -vv test/python -k "not test_fluxes"  # [ppc64le]
