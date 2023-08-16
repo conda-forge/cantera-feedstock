@@ -17,7 +17,6 @@ source:
 build:
   number: 0
   include_recipe: True
-  skip: True  # [win]
 
 requirements:
   build:
@@ -48,7 +47,6 @@ outputs:
     script: build_lib.sh  # [not win]
     script: build_lib.bat  # [win]
     build:
-      skip: True  # [win]
       ignore_run_exports_from:
         # only the header part of these libraries are used
         - boost-cpp
@@ -86,7 +84,6 @@ outputs:
     script: build_devel.sh  # [not win]
     script: build_devel.bat  # [win]
     build:
-      skip: True  # [win]
       ignore_run_exports_from:
         # only the header part of these libraries are used
         - boost-cpp
@@ -166,8 +163,8 @@ outputs:
         - pywin32  # [win]
         - cython
         # These two are added here so that conda-build doesn't package their files into cantera too
-        - libcantera-devel {{ version }}  # [not win]
-        - libcantera {{ version }}  # [not win]
+        - libcantera-devel {{ version }}
+        - libcantera {{ version }}
         - libblas
         - liblapack
       run:
@@ -175,7 +172,7 @@ outputs:
         - setuptools
         - {{ pin_compatible('numpy') }}
         - ruamel_yaml
-        - libcantera {{ version }}  # [not win]
+        - libcantera {{ version }}
     build:
       entry_points:
         - ck2yaml = cantera.ck2yaml:script_entry_point
