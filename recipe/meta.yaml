@@ -117,8 +117,20 @@ outputs:
       run:
         - libcantera {{ version }}
     test:
+      requires:
+        - cmake
+        - make  # [not win]
+        - scons
+        - pkgconfig
+        - {{ compiler('c') }}
+        - {{ compiler('cxx') }}
+        - numpy
+        - python {{ python }}
+      files:
+        - test-lib
       commands:
         - test -f $PREFIX/include/cantera/transport.h  # [not win]
+        - ./test-lib/test-samples.sh  # [not win]
 
   - name: cantera
     script: build_py.sh  # [not win]
