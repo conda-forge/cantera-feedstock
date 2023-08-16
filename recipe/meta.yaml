@@ -29,7 +29,7 @@ requirements:
     - scons >=4.1
     - setuptools
   host:
-    - python >=3.7
+    - python >=3.8
     - boost-cpp
     - numpy
     - fmt
@@ -63,7 +63,7 @@ outputs:
         - scons >=4.1
         - setuptools
       host:
-        - python >=3.7
+        - python >=3.8
         - boost-cpp
         - numpy
         - fmt
@@ -101,7 +101,7 @@ outputs:
         - scons >=4.1
         - setuptools
       host:
-        - python >=3.7
+        - python >=3.8
         - setuptools
         - pip
         - boost-cpp
