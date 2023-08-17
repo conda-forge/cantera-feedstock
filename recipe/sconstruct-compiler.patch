@@ -1,0 +1,185 @@
+From 52d7ffe858767e9f3ebe3d1bc5fcb330a324e9ac Mon Sep 17 00:00:00 2001
+From: Ray Speth <speth@mit.edu>
+Date: Thu, 17 Aug 2023 10:44:24 -0400
+Subject: [PATCH] Improve setting compiler in sample SConstruct files
+
+For package builds, do not specify compiler. Otherwise, specify the
+same compilers that were used to build Cantera.
+
+In both cases, allow CC, CXX, etc. environment variables to override
+the settings in SConstruct.
+---
+ samples/clib/SConscript    |  9 +++++++++
+ samples/clib/SConstruct.in |  2 +-
+ samples/cxx/SConscript     | 21 ++++++++-------------
+ samples/cxx/SConstruct.in  |  5 +++--
+ samples/f77/SConscript     | 23 ++++++++++-------------
+ samples/f77/SConstruct.in  |  4 ++--
+ samples/f90/SConscript     |  9 +++++++++
+ samples/f90/SConstruct.in  |  2 +-
+ 8 files changed, 43 insertions(+), 32 deletions(-)
+
+diff --git a/samples/clib/SConscript b/samples/clib/SConscript
+index 345ee35d8..053ee5186 100644
+--- a/samples/clib/SConscript
++++ b/samples/clib/SConscript
+@@ -36,6 +36,15 @@ for programName, sources in samples:
+     localenv['tmpl_progname'] = programName
+     localenv['tmpl_sourcename'] = programName + '.c'
+ 
++    if localenv['package_build']:
++        # For package builds, use environment variables or rely on SCons to find the
++        # default compiler
++        localenv['tmpl_cc'] = "env['CC'] = os.environ.get('CC', env['CC'])"
++    else:
++        # Otherwise, use the same compiler that was used to build Cantera, with the
++        # environment variables optionally overriding
++        localenv['tmpl_cc'] = env.subst("env['CC'] = os.environ.get('CC', '$CC')")
++
+     sconstruct = localenv.SubstFile('SConstruct', 'SConstruct.in')
+     install("$inst_sampledir/clib", sconstruct)
+ 
+diff --git a/samples/clib/SConstruct.in b/samples/clib/SConstruct.in
+index 9ce368fd9..87a91ba37 100644
+--- a/samples/clib/SConstruct.in
++++ b/samples/clib/SConstruct.in
+@@ -1,7 +1,7 @@
+ import os
+ env = Environment(ENV = os.environ)
+ 
+-env['CC'] = '@CC@'
++@tmpl_cc@
+ env.Append(CCFLAGS=@tmpl_compiler_flags@,
+            CPPPATH=@tmpl_cantera_incdirs@,
+            LIBS=@tmpl_cantera_libs@,
+diff --git a/samples/cxx/SConscript b/samples/cxx/SConscript
+index 578f5493e..dad7b979f 100644
+--- a/samples/cxx/SConscript
++++ b/samples/cxx/SConscript
+@@ -102,19 +102,14 @@ set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}
+         env_args.append('MSVC_VERSION={0!r}'.format(localenv['MSVC_VERSION']))
+     localenv['tmpl_env_args'] = ', '.join(env_args)
+ 
+-    if localenv["package_build"]:
+-        # We do not want to specify the conda compilers from the build environment,
+-        # because those won't be installed on the user's system.
+-        if localenv["OS"] == "Darwin":
+-            localenv["CXX"] = "clang++"
+-            localenv["CC"] = "clang"
+-        elif localenv["OS"] == "Windows":
+-            # compilation needs the Visual Studio Command Prompt
+-            localenv["CXX"] = "cl"
+-            localenv["CC"] = "cl"
+-        else:
+-            localenv["CXX"] = "g++"
+-            localenv["CC"] = "gcc"
++    if localenv['package_build']:
++        # For package builds, use environment variables or rely on SCons to find the
++        # default compiler
++        localenv['tmpl_cxx'] = "env['CXX'] = os.environ.get('CXX', env['CXX'])"
++    else:
++        # Otherwise, use the same compiler that was used to build Cantera, with the
++        # environment variables optionally overriding
++        localenv['tmpl_cxx'] = env.subst("env['CXX'] = os.environ.get('CXX', '$CXX')")
+ 
+     sconstruct = localenv.SubstFile(pjoin(subdir, 'SConstruct'), 'SConstruct.in')
+     install(pjoin('$inst_sampledir', 'cxx', subdir), sconstruct)
+diff --git a/samples/cxx/SConstruct.in b/samples/cxx/SConstruct.in
+index c8851bcb4..d8e6a460a 100644
+--- a/samples/cxx/SConstruct.in
++++ b/samples/cxx/SConstruct.in
+@@ -1,6 +1,7 @@
+-env = Environment(@tmpl_env_args@)
++import os
++env = Environment(ENV=os.environ, @tmpl_env_args@)
+ 
+-env['CXX'] = '@CXX@'
++@tmpl_cxx@
+ env.Append(CCFLAGS=@tmpl_compiler_flags@,
+            CPPPATH=@tmpl_cantera_incdirs@,
+            LIBS=@tmpl_cantera_libs@,
+diff --git a/samples/f77/SConscript b/samples/f77/SConscript
+index 6b0efc356..aa1a55253 100644
+--- a/samples/f77/SConscript
++++ b/samples/f77/SConscript
+@@ -58,19 +58,16 @@ localenv['tmpl_cantera_libdirs'] = repr([x for x in libdirs if x])
+ localenv['tmpl_cantera_linkflags'] = repr([x for x in linkflags if x])
+ localenv['tmpl_cantera_frameworks'] = repr(localenv['FRAMEWORKS'])
+ 
+-if localenv["package_build"]:
+-    # We do not want to specify the conda compilers from the build environment,
+-    # because those won't be installed on the user's system.
+-    if localenv["OS"] == "Darwin":
+-        localenv["F77"] = "gfortran"
+-        localenv["CC"] = "clang"
+-    elif env["OS"] == "Windows":
+-        # compilation needs the Visual Studio Command Prompt
+-        localenv["F77"] = "ifx"
+-        localenv["CC"] = "cl"
+-    else:
+-        localenv["F77"] = "gfortran"
+-        localenv["CC"] = "gcc"
++if localenv['package_build']:
++    # For package builds, use environment variables or rely on SCons to find the
++    # default compilers
++    localenv['tmpl_cc'] = "env['CC'] = os.environ.get('CC', env['CC'])"
++    localenv['tmpl_f77'] = "env['F77'] = os.environ.get('F77', env['F77'])"
++else:
++    # Otherwise, use the same compilers that were used to build Cantera, with the
++    # environment variables optionally overriding
++    localenv['tmpl_cc'] = env.subst("env['cc'] = os.environ.get('cc', '$cc')")
++    localenv['tmpl_f77'] = env.subst("env['F77'] = os.environ.get('F77', '$F77')")
+ 
+ sconstruct = localenv.SubstFile('SConstruct', 'SConstruct.in')
+ install("$inst_sampledir/f77", sconstruct)
+diff --git a/samples/f77/SConstruct.in b/samples/f77/SConstruct.in
+index ce632c838..838e51d4c 100644
+--- a/samples/f77/SConstruct.in
++++ b/samples/f77/SConstruct.in
+@@ -1,8 +1,8 @@
+ import os
+ env = Environment(ENV = os.environ)
+ 
+-env['F77'] = '@F77@'
+-env['CC'] = '@CC@'
++@tmpl_cc@
++@tmpl_f77@
+ env.Append(FFLAGS='-g',
+            CCFLAGS=@tmpl_compiler_flags@,
+            CPPPATH=@tmpl_cantera_incdirs@,
+diff --git a/samples/f90/SConscript b/samples/f90/SConscript
+index 99f9550cf..7f6a6e6d7 100644
+--- a/samples/f90/SConscript
++++ b/samples/f90/SConscript
+@@ -37,6 +37,15 @@ for programName, sources in samples:
+     localenv['tmpl_progname'] = programName
+     localenv['tmpl_sourcename'] = programName + '.f90'
+ 
++    if localenv['package_build']:
++        # For package builds, use environment variables or rely on SCons to find the
++        # default compiler
++        localenv['tmpl_f90'] = "env['F90'] = os.environ.get('F90', env['F90'])"
++    else:
++        # Otherwise, use the same compiler that was used to build Cantera, with the
++        # environment variables optionally overriding
++        localenv['tmpl_f90'] = env.subst("env['F90'] = os.environ.get('F90', '$F90')")
++
+     sconstruct = localenv.SubstFile('SConstruct', 'SConstruct.in')
+     install("$inst_sampledir/f90", sconstruct)
+ 
+diff --git a/samples/f90/SConstruct.in b/samples/f90/SConstruct.in
+index e798cbbca..f11564a3e 100644
+--- a/samples/f90/SConstruct.in
++++ b/samples/f90/SConstruct.in
+@@ -1,7 +1,7 @@
+ import os
+ env = Environment(ENV = os.environ)
+ 
+-env['F90'] = '@F90@'
++@tmpl_f90@
+ env.Append(FFLAGS='-g',
+            F90PATH=@tmpl_cantera_incdirs@,
+            LIBS=@tmpl_cantera_libs@,
+-- 
+2.39.2 (Apple Git-143)
+

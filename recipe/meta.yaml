@@ -14,6 +14,8 @@ source:
   - iomp5-macos.patch  # [osx and not arm64]
   - configure-hdf5.patch  # [build_platform != target_platform]
   - test-tolerances.patch  # [ppc64le]
+  - scons-rpath.patch  # [osx]
+  - sconstruct-compiler.patch
 
 build:
   number: 0
