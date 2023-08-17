@@ -78,7 +78,8 @@ outputs:
         - hdf5 >=1.14
     test:
       commands:
-        - cat ${CONDA_PREFIX}/conda-meta/libcantera-3.*.json
+        - cat ${CONDA_PREFIX}/conda-meta/libcantera-3.*.json  # [not win]
+        - type %CONDA_PREFIX%/conda-meta/libcantera-3.*.json  # [win]
         - test -f $PREFIX/lib/libcantera${SHLIB_EXT}  # [not win]
 
   - name: libcantera-devel
@@ -130,7 +131,8 @@ outputs:
       files:
         - test-lib
       commands:
-        - cat ${CONDA_PREFIX}/conda-meta/libcantera-devel-*.json
+        - cat ${CONDA_PREFIX}/conda-meta/libcantera-devel-*.json  # [not win]
+        - type %CONDA_PREFIX%/conda-meta/libcantera-devel-*.json  # [win]
         - test -f $PREFIX/include/cantera/transport.h  # [not win]
         - ./test-lib/test-samples.sh  # [not win and build_platform == target_platform]
         - call test-lib\test-samples.bat  # [win]
@@ -204,7 +206,8 @@ outputs:
       files:
         - test-lib
       commands:
-        - cat ${CONDA_PREFIX}/conda-meta/cantera-*.json
+        - cat ${CONDA_PREFIX}/conda-meta/cantera-*.json  # [not win]
+        - type %CONDA_PREFIX%/conda-meta/cantera-*.json  # [win]
         - uname -a  # [not win]
         - python -c 'import platform; print("Python platform:", platform.platform())'
         - python -m pytest -vv test/python  # [not ppc64le]
