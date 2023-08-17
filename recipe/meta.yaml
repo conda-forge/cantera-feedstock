@@ -193,12 +193,20 @@ outputs:
       requires:
         - pytest
         - pint
+        - libcantera-devel {{ version }}
+        - cmake
+        - make  # [not win]
+        - scons
+        - {{ compiler('c') }}
+        - {{ compiler('cxx') }}
       imports:
         - cantera
       source_files:
         - test/python
         - test/data
         - data
+      files:
+        - test-lib
       commands:
         - cat ${CONDA_PREFIX}/conda-meta/cantera-*.json
         - uname -a  # [not win]
@@ -210,6 +218,8 @@ outputs:
         - ck2yaml --help
         - ctml2yaml --help
         - yaml2ck --help
+        - ./test-lib/test-extensiblerate.sh  # [not win and build_platform == target_platform]
+        - call test-lib\test-extensiblerate.bat  # [win]
 
 about:
   home: https://cantera.org
