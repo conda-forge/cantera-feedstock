@@ -7,4 +7,4 @@ rd /s /q %LIBRARY_PREFIX%/share
 rd /s /q %LIBRARY_PREFIX%/include
 rd /s /q %LIBRARY_PREFIX%/bin
 rd /s /q %LIBRARY_PREFIX%/lib/pkg-config
-rd /s /q %LIBRARY_PREFIX%/lib/libcantera.a
+rd /s /q %LIBRARY_PREFIX%/lib/cantera.lib
