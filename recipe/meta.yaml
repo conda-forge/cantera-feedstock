@@ -200,6 +200,8 @@ outputs:
         - data
       commands:
         - cat ${CONDA_PREFIX}/conda-meta/cantera-*.json
+        - uname -a  # [not win]
+        - python -c 'import platform; print("Python platform:", platform.platform())'
         - python -m pytest -vv test/python  # [not ppc64le]
         # "test_fluxes" fails on ppc64le for unknown reasons
         - python -m pytest -vv test/python -k "not test_fluxes"  # [ppc64le]
