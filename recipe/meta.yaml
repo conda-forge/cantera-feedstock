@@ -133,7 +133,7 @@ outputs:
       commands:
         - cat ${CONDA_PREFIX}/conda-meta/libcantera-devel-*.json
         - test -f $PREFIX/include/cantera/transport.h  # [not win]
-        - ./test-lib/test-samples.sh  # [not win]
+        - ./test-lib/test-samples.sh  # [not win and build_platform == target_platform]
 
   - name: cantera
     script: build_py.sh  # [not win]
