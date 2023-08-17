@@ -27,13 +27,8 @@ SET "ESC_PREFIX=%PREFIX:\=/%"
 ECHO prefix="%ESC_PREFIX%" >> cantera.conf
 
 CALL scons build -j%CPU_USE% renamed_shared_libraries=y
-IF ERRORLEVEL 1 GOTO :failure ELSE GOTO :success
+IF ERRORLEVEL 1 EXIT 1
 
-:failure
-REM TYPE config.log
-EXIT 1
-
-:success
 echo ****************************
 echo BUILD COMPLETED SUCCESSFULLY
 echo ****************************
