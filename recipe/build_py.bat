@@ -2,12 +2,8 @@ echo ****************************
 echo PYTHON %PYTHON% BUILD STARTED
 echo ****************************
 
-COPY cantera.conf cantera.conf.bak
-DEL /F cantera.conf
-FINDSTR /V "python_package" cantera.conf.bak > cantera.conf
-DEL /F cantera.conf.bak
+echo on
 
-ECHO python_package='full' >> cantera.conf
 SET "ESC_PYTHON=%PYTHON:\=/%"
 ECHO python_cmd="%ESC_PYTHON%" >> cantera.conf
 
@@ -15,15 +11,10 @@ ECHO python_cmd="%ESC_PYTHON%" >> cantera.conf
 SET /A CPU_USE=%CPU_COUNT% / 2
 IF %CPU_USE% EQU 0 SET CPU_USE=1
 
-CALL scons build -j%CPU_USE%
+CALL scons build -j%CPU_USE% python_package=y
 IF ERRORLEVEL 1 EXIT 1
 
-echo ****************************
-echo PYTHON %PYTHON% BUILD COMPLETED SUCCESSFULLY
-echo ****************************
-
-cd interfaces/cython
-"%PYTHON%" setup.py build --build-lib=../../build/python install
+"%PYTHON%" -m pip install --no-deps --no-index --find-links=build\python\dist\ cantera
 IF ERRORLEVEL 1 EXIT 1
 
 :: Plugin library for loading Cantera Python extensions from C++
@@ -31,3 +22,7 @@ copy "%SRC_DIR%\build\lib\cantera_python*.dll" "%PREFIX%\Library\bin\"
 
 :: Conda environment handles library path, so no need to co-install cantera_shared.dll
 del /f "%PREFIX%\Lib\site-packages\cantera\cantera_shared.dll"
+
+echo ****************************
+echo PYTHON %PYTHON% BUILD COMPLETED SUCCESSFULLY
+echo ****************************
