@@ -16,6 +16,7 @@ source:
   - test-tolerances.patch  # [ppc64le]
   - scons-rpath.patch  # [osx]
   - sconstruct-compiler.patch
+  - cmake-openmp.patch
 
 build:
   number: 0
