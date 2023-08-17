@@ -26,7 +26,7 @@ IF %CPU_USE% EQU 0 SET CPU_USE=1
 SET "ESC_PREFIX=%PREFIX:\=/%"
 ECHO prefix="%ESC_PREFIX%" >> cantera.conf
 
-CALL scons build -j%CPU_USE%
+CALL scons build -j%CPU_USE% renamed_shared_libraries=y
 IF ERRORLEVEL 1 GOTO :failure ELSE GOTO :success
 
 :failure
