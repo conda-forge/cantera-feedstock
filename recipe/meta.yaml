@@ -221,7 +221,7 @@ outputs:
         - python -c "import cantera as ct; print(ct.__version__, ct.__git_commit__, ct.__file__)"
         - otool -L ${CONDA_PREFIX}/lib/libcantera.3.0.0.dylib  # [osx]
         - otool -L ${CONDA_PREFIX}/lib/libcantera_python3_*.dylib  # [osx]
-        - python -c 'import platform; print("Python platform:", platform.platform())'
+        - python -c "import platform; print('Python platform:', platform.platform())"
         - python -m pytest -vv test/python  # [not ppc64le]
         # "test_fluxes" fails on ppc64le for unknown reasons
         - python -m pytest -vv test/python -k "not test_fluxes"  # [ppc64le]
