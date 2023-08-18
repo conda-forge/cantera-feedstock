@@ -5,8 +5,9 @@ set "BASEDIR=%cd%"
 set "PYTHONPATH=%PYTHONPATH%;%BASEDIR%\test-lib"
 set "CANTERA_DATA=%BASEDIR%\test-lib"
 
-copy /y "%CONDA_PREFIX%\share\cantera\samples\cxx\demo" "cxx_demo"
-copy "%BASEDIR%\test-lib\extensible-rate.cpp" "cxx_demo\demo.cpp"
+mkdir cxx_demo
+copy /y "%CONDA_PREFIX%\share\cantera\samples\cxx\demo\*.*" cxx_demo
+copy "%BASEDIR%\test-lib\extensible-rate.cpp" cxx_demo\demo.cpp
 
 rem Test ExtensibleRate with CMake
 echo ***** Testing ExtensibleRate with CMake *****
