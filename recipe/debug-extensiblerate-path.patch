@@ -1,0 +1,24 @@
+From 0397d36fedcb111a6228aa321eb922594fa8945a Mon Sep 17 00:00:00 2001
+From: Ray Speth <speth@mit.edu>
+Date: Fri, 18 Aug 2023 10:47:56 -0400
+Subject: [PATCH] TEMP: debug module path for ExtensibleRate
+
+---
+ src/extensions/pythonShim.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/extensions/pythonShim.cpp b/src/extensions/pythonShim.cpp
+index 15a71b09b..cbb9ac45c 100644
+--- a/src/extensions/pythonShim.cpp
++++ b/src/extensions/pythonShim.cpp
+@@ -93,6 +93,7 @@ void loadCanteraPython()
+       #endif
+         Py_Initialize();
+     }
++    PyRun_SimpleString("import sys; print('>>>> embedded sys.path:', sys.path)");
+     PyObject* pythonExt = PyImport_ImportModule("cantera");
+     checkPythonError(pythonExt == nullptr, "cantera import failed");
+     Py_DecRef(pythonExt);
+-- 
+2.39.2 (Apple Git-143)
+

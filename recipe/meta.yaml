@@ -18,6 +18,7 @@ source:
   - sconstruct-compiler.patch
   - cmake-openmp.patch
   - conda-layout.patch
+  - debug-extensiblerate-path.patch
 
 build:
   number: 0
