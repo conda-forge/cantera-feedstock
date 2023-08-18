@@ -1,30 +1,5 @@
 echo on
 
-rem Test clib example with CMake
-echo ***** Testing clib example with CMake *****
-cd /d "%CONDA_PREFIX%\share\cantera\samples\clib"
-echo ===
-type CMakeLists.txt
-echo ===
-mkdir build
-cd build
-cmake ..
-cmake --build . --config Release
-Release\demo.exe
-if %ERRORLEVEL% neq 0 exit 1
-echo "SUCCESS!"
-
-rem Test clib example with SCons
-echo ***** Testing clib example with SCons *****
-cd /d "%CONDA_PREFIX%\share\cantera\samples\clib"
-echo ===
-type SConstruct
-echo ===
-scons
-demo.exe
-if %ERRORLEVEL% neq 0 exit 1
-echo "SUCCESS!"
-
 rem Test kinetics1 example with CMake
 echo ***** Testing kinetics1 example with CMake *****
 cd /d "%CONDA_PREFIX%\share\cantera\samples\cxx\kinetics1"
@@ -72,6 +47,31 @@ type SConstruct
 echo ===
 scons
 openmp_ignition.exe
+if %ERRORLEVEL% neq 0 exit 1
+echo "SUCCESS!"
+
+rem Test clib example with CMake
+echo ***** Testing clib example with CMake *****
+cd /d "%CONDA_PREFIX%\share\cantera\samples\clib"
+echo ===
+type CMakeLists.txt
+echo ===
+mkdir build
+cd build
+cmake ..
+cmake --build . --config Release
+Release\demo.exe
+if %ERRORLEVEL% neq 0 exit 1
+echo "SUCCESS!"
+
+rem Test clib example with SCons
+echo ***** Testing clib example with SCons *****
+cd /d "%CONDA_PREFIX%\share\cantera\samples\clib"
+echo ===
+type SConstruct
+echo ===
+scons
+demo.exe
 if %ERRORLEVEL% neq 0 exit 1
 echo "SUCCESS!"
 
