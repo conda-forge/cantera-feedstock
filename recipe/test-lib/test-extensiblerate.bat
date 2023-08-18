@@ -19,7 +19,7 @@ cd build
 cmake ..
 cmake --build . --config Release
 Release\demo.exe
-if errorlevel 1 exit 1
+if %ERRORLEVEL% neq 0 exit 1
 echo SUCCESS!
 
 rem Test ExtensibleRate with SCons
@@ -30,5 +30,5 @@ type SConstruct
 echo ===
 scons
 demo.exe
-if errorlevel 1 exit 1
+if %ERRORLEVEL% neq 0 exit 1
 echo SUCCESS
