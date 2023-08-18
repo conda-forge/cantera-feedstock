@@ -10,6 +10,8 @@ unset MACOSX_DEPLOYMENT_TARGET
 unset MACOSX_SDK_VERSION
 
 BASEDIR=`pwd`
+export CANTERA_DATA=${BASEDIR}/test-lib
+export PYTHONPATH=${PYTHONPATH}:${BASEDIR}/test-lib
 
 # Prepare ExtensibleRate test
 cp -a ${CONDA_PREFIX}/share/cantera/samples/cxx/demo cxx_demo
@@ -24,8 +26,6 @@ mkdir build
 cd build
 cmake ..
 cmake --build .
-cp ${BASEDIR}/test-lib/user_ext.py .
-cp ${BASEDIR}/test-lib/extensible-reactions.yaml .
 ./demo || die "extensiblerate-cmake failed"
 
 echo -e '\n***** Testing ExtensibleRate with SCons *****\n'
@@ -34,6 +34,4 @@ echo "==="
 cat SConstruct
 echo "==="
 scons
-cp ${BASEDIR}/test-lib/user_ext.py .
-cp ${BASEDIR}/test-lib/extensible-reactions.yaml .
 ./demo || die "extensiblerate-scons failed"
