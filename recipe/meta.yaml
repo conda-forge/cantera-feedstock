@@ -17,6 +17,7 @@ source:
   - scons-rpath.patch  # [osx]
   - sconstruct-compiler.patch
   - cmake-openmp.patch
+  - conda-layout.patch
 
 build:
   number: 0

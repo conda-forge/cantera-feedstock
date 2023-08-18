@@ -1,0 +1,26 @@
+From a305c9bb6d183131153d91649fdb62d99db90905 Mon Sep 17 00:00:00 2001
+From: Ray Speth <speth@mit.edu>
+Date: Thu, 17 Aug 2023 23:05:16 -0400
+Subject: [PATCH] [SCons] Always allow 'conda' layout when using
+ 'package_build'
+
+---
+ SConstruct | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/SConstruct b/SConstruct
+index 009bdb831..a90da3fe5 100644
+--- a/SConstruct
++++ b/SConstruct
+@@ -2050,7 +2050,7 @@ if conda_prefix is not None and sys.executable.startswith(str(conda_prefix)):
+             env["prefix"] = conda_prefix.resolve().as_posix()
+         logger.info(
+             f"Using conda environment as default 'prefix': {env['prefix']}")
+-elif env["layout"] == "conda":
++elif env["layout"] == "conda" and not env["package_build"]:
+     logger.error("Layout option 'conda' requires a conda environment.")
+     sys.exit(1)
+ 
+-- 
+2.39.2 (Apple Git-143)
+
