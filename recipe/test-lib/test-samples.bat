@@ -10,7 +10,7 @@ mkdir build
 cd build
 cmake ..
 cmake --build . --config Release
-demo.exe
+Release\demo.exe
 if errorlevel 1 exit 1
 echo "SUCCESS!"
 
@@ -35,7 +35,7 @@ mkdir build
 cd build
 cmake ..
 cmake --build . --config Release
-kinetics1.exe
+Release\kinetics1.exe
 if errorlevel 1 exit 1
 echo "SUCCESS!"
 
@@ -60,7 +60,7 @@ mkdir build
 cd build
 cmake ..
 cmake --build . --config Release
-openmp_ignition.exe
+Release\openmp_ignition.exe
 if errorlevel 1 exit 1
 echo "SUCCESS!"
 
