@@ -19,6 +19,7 @@ source:
   - cmake-openmp.patch
   - conda-layout.patch
   - debug-extensiblerate-path.patch
+  - conda-data-path.patch
 
 build:
   number: 0
