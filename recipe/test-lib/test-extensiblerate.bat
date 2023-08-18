@@ -18,7 +18,7 @@ mkdir build
 cd build
 cmake ..
 cmake --build . --config Release
-demo.exe
+Release\demo.exe
 if errorlevel 1 exit 1
 echo SUCCESS!
 
