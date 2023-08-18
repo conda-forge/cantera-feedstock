@@ -12,10 +12,10 @@ SET /A CPU_USE=%CPU_COUNT% / 2
 IF %CPU_USE% EQU 0 SET CPU_USE=1
 
 CALL scons build -j%CPU_USE% python_package=y
-IF ERRORLEVEL 1 EXIT 1
+IF %ERRORLEVEL% NEQ 0 EXIT 1
 
 "%PYTHON%" -m pip install --no-deps --no-index --find-links=build\python\dist\ cantera
-IF ERRORLEVEL 1 EXIT 1
+IF %ERRORLEVEL% NEQ 0 EXIT 1
 
 :: Plugin library for loading Cantera Python extensions from C++
 copy "%SRC_DIR%\build\lib\cantera_python*.dll" "%PREFIX%\Library\bin\"

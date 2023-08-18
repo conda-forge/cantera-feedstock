@@ -11,7 +11,7 @@ cd build
 cmake ..
 cmake --build . --config Release
 Release\demo.exe
-if errorlevel 1 exit 1
+if %ERRORLEVEL% neq 0 exit 1
 echo "SUCCESS!"
 
 rem Test clib example with SCons
@@ -22,7 +22,7 @@ type SConstruct
 echo ===
 scons
 demo.exe
-if errorlevel 1 exit 1
+if %ERRORLEVEL% neq 0 exit 1
 echo "SUCCESS!"
 
 rem Test kinetics1 example with CMake
@@ -36,7 +36,7 @@ cd build
 cmake ..
 cmake --build . --config Release
 Release\kinetics1.exe
-if errorlevel 1 exit 1
+if %ERRORLEVEL% neq 0 exit 1
 echo "SUCCESS!"
 
 rem Test kinetics1 example with SCons
@@ -47,7 +47,7 @@ type SConstruct
 echo ===
 scons
 kinetics1.exe
-if errorlevel 1 exit 1
+if %ERRORLEVEL% neq 0 exit 1
 echo "SUCCESS!"
 
 rem Test openmp_ignition example with CMake
@@ -61,7 +61,7 @@ cd build
 cmake ..
 cmake --build . --config Release
 Release\openmp_ignition.exe
-if errorlevel 1 exit 1
+if %ERRORLEVEL% neq 0 exit 1
 echo "SUCCESS!"
 
 rem Test openmp_ignition example with SCons
@@ -72,7 +72,7 @@ type SConstruct
 echo ===
 scons
 openmp_ignition.exe
-if errorlevel 1 exit 1
+if %ERRORLEVEL% neq 0 exit 1
 echo "SUCCESS!"
 
 echo ****************************

@@ -12,7 +12,7 @@ REM )
 
 :: Have to use CALL to prevent the script from exiting after calling SCons
 CALL scons clean
-IF ERRORLEVEL 1 EXIT 1
+IF %ERRORLEVEL% NEQ 0 EXIT 1
 
 DEL /F cantera.conf
 
@@ -27,7 +27,7 @@ SET "ESC_PREFIX=%PREFIX:\=/%"
 ECHO prefix="%ESC_PREFIX%" >> cantera.conf
 
 CALL scons build -j%CPU_USE% renamed_shared_libraries=y
-IF ERRORLEVEL 1 EXIT 1
+IF %ERRORLEVEL% NEQ 0 EXIT 1
 
 echo ****************************
 echo BUILD COMPLETED SUCCESSFULLY
