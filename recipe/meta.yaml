@@ -35,7 +35,7 @@ requirements:
     - scons >=4.1
     - setuptools
   host:
-    - python >=3.8
+    - python {{ python }}
     - boost-cpp
     - numpy
     - fmt
@@ -61,7 +61,7 @@ outputs:
         - python
     requirements:
       build:
-        - python                                 # [build_platform != target_platform]
+        - python {{ python }}                    # [build_platform != target_platform]
         - cross-python_{{ target_platform }}     # [build_platform != target_platform]
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
