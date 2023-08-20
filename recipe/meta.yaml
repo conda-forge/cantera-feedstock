@@ -33,8 +33,6 @@ requirements:
     - fmt
     - eigen
     - yaml-cpp
-    - gtest
-    - gmock
     - sundials ==6.6
     - hdf5 >=1.14
     - highfive >=2.7
@@ -66,8 +64,6 @@ outputs:
         - fmt
         - eigen
         - yaml-cpp
-        - gtest
-        - gmock
         - sundials ==6.6
         - hdf5 >=1.14
         - highfive >=2.7
@@ -108,8 +104,6 @@ outputs:
         - fmt
         - eigen
         - yaml-cpp
-        - gtest
-        - gmock
         - sundials ==6.6
         - pywin32  # [win]
         - libcantera {{ version }}
@@ -165,8 +159,6 @@ outputs:
         - fmt
         - eigen
         - yaml-cpp
-        - gtest
-        - gmock
         - sundials ==6.6
         - pywin32  # [win]
         - cython
