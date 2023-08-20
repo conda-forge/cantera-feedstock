@@ -8,18 +8,6 @@ source:
   # url: https://github.com/Cantera/cantera/archive/v{{ version }}.tar.gz
   url: https://github.com/Cantera/cantera/archive/43fca5354.tar.gz
   sha256: e267b3a2dfd064af65155a8987972ee2287eda2e42f5d2d8f78699da68679454
-  patches:
-  # https://github.com/conda-forge/cantera-feedstock/pull/13#issuecomment-809382526
-  - cross-compile.patch  # [build_platform != target_platform]
-  - iomp5-macos.patch  # [osx and not arm64]
-  - configure-hdf5.patch  # [build_platform != target_platform]
-  - test-tolerances.patch  # [ppc64le]
-  - scons-rpath.patch  # [osx]
-  - sconstruct-compiler.patch
-  - cmake-openmp.patch
-  - conda-layout.patch
-  - debug-extensiblerate-path.patch
-  - conda-data-path.patch
 
 build:
   number: 0
@@ -28,63 +16,25 @@ build:
 
 requirements:
   build:
-    - python                                 # [build_platform != target_platform]
-    - cross-python_{{ target_platform }}     # [build_platform != target_platform]
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - scons >=4.1
-    - setuptools
   host:
     - python {{ python }}
-    - boost-cpp
-    - numpy
-    - fmt
-    - eigen
-    - yaml-cpp
-    - gtest
-    - gmock
-    - sundials ==6.6
-    - hdf5 >=1.14
-    - highfive >=2.7
-    - pywin32  # [win]
-    - libblas
-    - liblapack
 
 outputs:
   - name: libcantera
     script: build_lib.sh
     build:
       skip: True  # [not osx]
-      ignore_run_exports_from:
-        # only the header part of these libraries are used
-        - boost-cpp
-        - python
     requirements:
       build:
         - python {{ python }}
-        - cross-python_{{ target_platform }}     # [build_platform != target_platform]
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        - scons >=4.1
-        - setuptools
       host:
         - python {{ python }}
-        - boost-cpp
-        - numpy
-        - fmt
-        - eigen
-        - yaml-cpp
-        - gtest
-        - gmock
-        - sundials ==6.6
-        - hdf5 >=1.14
-        - highfive >=2.7
-        - pywin32  # [win]
-        - libblas
-        - liblapack
       run:
         - python {{ python }}
-        - hdf5 >=1.14
     test:
       files:
         - test-lib
