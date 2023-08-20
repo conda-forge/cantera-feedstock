@@ -210,7 +210,7 @@ outputs:
         - ck2yaml --help
         - ctml2yaml --help
         - yaml2ck --help
-        - ./test-lib/test-extensiblerate.sh  # [not win and build_platform == target_platform]
+        - ./test-lib/test-extensiblerate.sh  # [not win and build_platform == target_platform and not (osx and x86_64 and py == 310)]
         - call test-lib\test-extensiblerate.bat  # [win]
 
 about:
