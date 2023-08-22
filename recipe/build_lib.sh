@@ -1,18 +1,9 @@
-source $RECIPE_DIR/build_devel.sh
-echo "****************************"
-echo "DELETING files from devel except shared libraries"
-echo "****************************"
+echo "Hello from build_lib.sh"
 
-rm -rf $PREFIX/share
-rm -rf $PREFIX/include/cantera
-rm -rf $PREFIX/bin
-rm -rf $PREFIX/lib/pkg-config
-rm -rf $PREFIX/lib/libcantera.a
+echo "~~~~~~~~~~ 'conda list' output ~~~~~~~~~~"
+conda list
+echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 
-if [[ "$target_platform" == osx-* ]]; then
-  ${OTOOL:-otool} -L $PREFIX/lib/libcantera.dylib
-fi
-
-echo "************************"
-echo "DELETING files COMPLETED"
-echo "************************"
+echo "~~~~~~~~~~ 'conda info' output ~~~~~~~~~~"
+conda info
+echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"

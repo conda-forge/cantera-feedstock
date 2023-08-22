@@ -1,188 +1,47 @@
-{% set version = "2.6.0" %}
+{% set version = "3.0.0b1" %}
 
 package:
   name: cantera-recipe
   version: {{ version }}
 
 source:
-  url: https://github.com/Cantera/cantera/archive/v{{ version }}.tar.gz
-  sha256: 7273622ea76a53373cee820f939613b15eea3dd83db6e1b127c5ed043f77dc5b
-  patches:
-  # https://github.com/conda-forge/cantera-feedstock/pull/13#issuecomment-809382526
-  - cross-compile.patch  # [build_platform != target_platform]
-  - iomp5-macos.patch  # [osx and not arm64]
-  # Unnecessary after 2.6.0:
-  - 1326.diff
+  # url: https://github.com/Cantera/cantera/archive/v{{ version }}.tar.gz
+  url: https://github.com/Cantera/cantera/archive/43fca5354.tar.gz
+  sha256: e267b3a2dfd064af65155a8987972ee2287eda2e42f5d2d8f78699da68679454
 
 build:
-  number: 5
+  number: 0
   include_recipe: True
-  skip: True  # [win]
+  skip: True  # [not osx]
 
 requirements:
   build:
-    - python                                 # [build_platform != target_platform]
-    - cross-python_{{ target_platform }}     # [build_platform != target_platform]
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - scons >=4.1
-    - setuptools
   host:
-    - python >=3.7
-    - boost-cpp
-    - numpy
-    - fmt
-    - eigen
-    - yaml-cpp
-    - gtest
-    - gmock
-    - sundials ==5.7
-    - pywin32  # [win]
-    - libblas
-    - liblapack
+    - python {{ python }}
 
 outputs:
   - name: libcantera
-    script: build_lib.sh  # [not win]
-    script: build_lib.bat  # [win]
+    script: build_lib.sh
     build:
-      skip: True  # [win]
-      ignore_run_exports_from:
-        # only the header part of these libraries are used
-        - boost-cpp
-        - fmt
-        - python
+      skip: True  # [not osx]
     requirements:
       build:
-        - python                                 # [build_platform != target_platform]
-        - cross-python_{{ target_platform }}     # [build_platform != target_platform]
+        - python {{ python }}
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        - scons >=4.1
-        - setuptools
-      host:
-        - python >=3.7
-        - boost-cpp
-        - numpy
-        - fmt
-        - eigen
-        - yaml-cpp
-        - gtest
-        - gmock
-        - sundials ==5.7
-        - pywin32  # [win]
-        - libblas
-        - liblapack
-    test:
-      commands:
-        - test -f $PREFIX/lib/libcantera${SHLIB_EXT}  # [not win]
-
-  - name: libcantera-devel
-    script: build_devel.sh  # [not win]
-    script: build_devel.bat  # [win]
-    build:
-      skip: True  # [win]
-      ignore_run_exports_from:
-        # only the header part of these libraries are used
-        - boost-cpp
-        - fmt
-        - python
-    requirements:
-      build:
-        - python                                 # [build_platform != target_platform]
-        - cross-python_{{ target_platform }}     # [build_platform != target_platform]
-        - {{ compiler('c') }}
-        - {{ compiler('cxx') }}
-        - scons >=4.1
-        - setuptools
-      host:
-        - python >=3.7
-        - setuptools
-        - pip
-        - boost-cpp
-        - numpy
-        - fmt
-        - eigen
-        - yaml-cpp
-        - gtest
-        - gmock
-        - sundials ==5.7
-        - pywin32  # [win]
-        - libcantera {{ version }}
-        - libblas
-        - liblapack
-      run:
-        - libcantera {{ version }}
-    test:
-      commands:
-        - test -f $PREFIX/include/cantera/transport.h  # [not win]
-
-  - name: cantera
-    script: build_py.sh  # [not win]
-    script: build_py.bat  # [win]
-    build:
-      ignore_run_exports_from:
-        # only the header part of these libraries are used
-        - boost-cpp
-        - fmt
-    requirements:
-      build:
-        - python                                 # [build_platform != target_platform]
-        - cross-python_{{ target_platform }}     # [build_platform != target_platform]
-        - {{ compiler('c') }}
-        - {{ compiler('cxx') }}
-        - scons >=4.1
-        - setuptools
-        - numpy                                  # [build_platform != target_platform]
-        - cython                                 # [build_platform != target_platform]
-        - pip <=22.0
       host:
         - python {{ python }}
-        - pip <=22.0
-        - setuptools
-        - boost-cpp
-        - numpy
-        - fmt
-        - eigen
-        - yaml-cpp
-        - gtest
-        - gmock
-        - sundials ==5.7
-        - pywin32  # [win]
-        - cython
-        # These two are added here so that conda-build doesn't package their files into cantera too
-        - libcantera-devel {{ version }}  # [not win]
-        - libcantera {{ version }}  # [not win]
-        - libblas
-        - liblapack
       run:
-        - python
-        - setuptools
-        - {{ pin_compatible('numpy') }}
-        - h5py
-        - ruamel_yaml
-        - libcantera {{ version }}  # [not win]
-    build:
-      entry_points:
-        - ck2cti = cantera.ck2cti:script_entry_point
-        - ctml_writer = cantera.ctml_writer:main
-        - ck2yaml = cantera.ck2yaml:script_entry_point
-        - cti2yaml = cantera.cti2yaml:main
-        - ctml2yaml = cantera.ctml2yaml:main
-      include_recipe: True
+        - python {{ python }}
     test:
-      requires:
-        - pytest
-      imports:
-        - cantera
+      files:
+        - test-lib
       commands:
-        - python -m pytest --pyargs cantera.test  # [not ppc64le]
-        # "test_fluxes" fails on ppc64le for unknown reasons
-        - python -m pytest --pyargs cantera.test -k "not test_fluxes"  # [ppc64le]
-        - ck2cti --help
-        - cti2yaml --help
-        - ck2yaml --help
-        - ctml2yaml --help
+        - echo "STARTING TESTS"
+        - ./test-lib/test-mwe.sh
+        - echo "FINISHED TESTS"
 
 about:
   home: https://cantera.org
