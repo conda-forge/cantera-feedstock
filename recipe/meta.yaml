@@ -1,13 +1,12 @@
-{% set version = "3.0.0b1" %}
+{% set version = "3.0.0" %}
 
 package:
   name: cantera-recipe
   version: {{ version }}
 
 source:
-  # url: https://github.com/Cantera/cantera/archive/v{{ version }}.tar.gz
-  url: https://github.com/Cantera/cantera/archive/43fca5354.tar.gz
-  sha256: e267b3a2dfd064af65155a8987972ee2287eda2e42f5d2d8f78699da68679454
+  url: https://github.com/Cantera/cantera/archive/v{{ version }}.tar.gz
+  sha256: 6d17cdef21dae9deaf91351260b68ccf7e264c37c6030c9d4bf26a2cefb2b905
   patches:
   # https://github.com/conda-forge/cantera-feedstock/pull/13#issuecomment-809382526
   - cross-compile.patch  # [build_platform != target_platform]
