@@ -14,7 +14,7 @@ source:
   - configure-hdf5.patch  # [build_platform != target_platform]
 
 build:
-  number: 0
+  number: 1
   include_recipe: True
 
 requirements:
