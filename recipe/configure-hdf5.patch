@@ -1,0 +1,112 @@
+From 228566305ae045fada15651d3bcf18eb92a8d643 Mon Sep 17 00:00:00 2001
+From: Ray Speth <speth@mit.edu>
+Date: Tue, 15 Aug 2023 19:15:24 -0400
+Subject: [PATCH 3/4] Disable configure checks for HDF5
+
+---
+ SConstruct | 89 ++----------------------------------------------------
+ 1 file changed, 3 insertions(+), 86 deletions(-)
+
+diff --git a/SConstruct b/SConstruct
+index 67d1dc37f..cdb62d837 100644
+--- a/SConstruct
++++ b/SConstruct
+@@ -1457,92 +1457,9 @@ if env["hdf_libdir"]:
+     if env["use_rpath_linkage"]:
+         env.Append(RPATH=env["hdf_libdir"])
+ 
+-if env["hdf_support"] == "n":
+-    env["use_hdf5"] = False
+-else:
+-    env["use_hdf5"] = conf.CheckLib("hdf5", autoadd=False)
+-    if not env["use_hdf5"] and env["hdf_support"] == "y":
+-        config_error("HDF5 support has been specified but libraries were not found.")
+-
+-if env["use_hdf5"] and env["system_highfive"] in ("y", "default"):
+-
+-    if conf.CheckLibWithHeader(
+-            "hdf5", "highfive/H5File.hpp", language="C++", autoadd=False):
+-
+-        highfive_include = "<highfive/H5Version.hpp>"
+-        h5_version_source = get_expression_value(
+-            [highfive_include], "QUOTE(HIGHFIVE_VERSION)")
+-        retcode, h5_lib_version = conf.TryRun(h5_version_source, ".cpp")
+-        if retcode:
+-            if parse_version(h5_lib_version) < parse_version("2.5"):
+-                if env["system_highfive"] == "y":
+-                    config_error(
+-                        f"System HighFive version {h5_lib_version} is not "
+-                        "supported; version 2.5 or higher is required.")
+-                logger.info(
+-                    f"System HighFive version {h5_lib_version} is not supported.")
+-            else:
+-                env["system_highfive"] = True
+-            env["HIGHFIVE_VERSION"] = h5_lib_version.strip()
+-        else:
+-            config_error("Detected invalid HighFive configuration.")
+-
+-        highfive_include = "<highfive/H5DataType.hpp>"
+-        logger.info("Using system installation of HighFive library.")
+-
+-    elif env["system_highfive"] == "y":
+-        config_error(
+-            "Expected system installation of HighFive library, but it is either "
+-            "corrupted or could not be found.")
+-
+-if env["use_hdf5"] and env["system_highfive"] in ("n", "default"):
+-    env["system_highfive"] = False
+-    if not Path("ext/HighFive/include").is_dir():
+-        if not os.path.exists(".git"):
+-            config_error("HighFive is missing. Install HighFive in ext/HighFive.")
+-
+-        try:
+-            code = subprocess.call(["git", "submodule", "update", "--init",
+-                                    "--recursive", "ext/HighFive"])
+-        except Exception:
+-            code = -1
+-        if code:
+-            config_error("HighFive not found and submodule checkout failed.\n"
+-                        "Try manually checking out the submodule with:\n\n"
+-                        "    git submodule update --init --recursive ext/HighFive\n")
+-
+-    def highfive_version(cmake_lists):
+-        """Read highfive version from CMakeLists.txt"""
+-        h5_version = Path(cmake_lists).read_text()
+-        h5_version = [line for line in h5_version.split("\n")
+-                      if line.startswith("project(HighFive")]
+-        return re.search('[0-9]+\.[0-9]+\.[0-9]+', h5_version[0]).group(0)
+-
+-    env["HIGHFIVE_VERSION"] = highfive_version("ext/HighFive/CMakeLists.txt")
+-    highfive_include = '"../ext/HighFive/include/highfive/H5DataType.hpp"'
+-    logger.info(f"Using private installation of HighFive library.")
+-
+-if env["use_hdf5"]:
+-    if conf.CheckStatement("HighFive::details::Boolean::HighFiveTrue",
+-                           f"#include {highfive_include}"):
+-        env["highfive_boolean"] = True
+-
+-    hdf_version = textwrap.dedent("""\
+-        #include <iostream>
+-        #include "H5public.h"
+-        int main(int argc, char** argv) {
+-            std::cout << H5_VERS_MAJOR << "." << H5_VERS_MINOR << "." << H5_VERS_RELEASE;
+-            return 0;
+-        }
+-    """)
+-    retcode, hdf_version = conf.TryRun(hdf_version, ".cpp")
+-    if retcode:
+-        env["HDF_VERSION"] = hdf_version
+-        logger.info(
+-            f"Using HighFive version {env['HIGHFIVE_VERSION']} "
+-            f"for HDF5 {env['HDF_VERSION']}")
+-    else:
+-        logger.warning("Failed to determine HDF5 version.")
++env["system_highfive"] = True
++env["use_hdf5"] = True
++env["highfive_boolean"] = True
+ 
+ def set_fortran(pattern, value):
+     # Set compiler / flags for all Fortran versions to be the same
+-- 
+2.39.2 (Apple Git-143)
+

@@ -7,21 +7,19 @@ echo "****************************"
 cp "${RECIPE_DIR}/cantera_base.conf" cantera.conf
 
 echo "prefix = '${PREFIX}'" >> cantera.conf
-echo "boost_inc_dir = '${PREFIX}/include'" >> cantera.conf
-echo "extra_inc_dirs = '${PREFIX}/include/eigen3'" >> cantera.conf
+echo "extra_inc_dirs = '${PREFIX}/include'" >> cantera.conf
 echo "extra_lib_dirs = '${PREFIX}/lib'" >> cantera.conf
 
 if [[ "${OSX_ARCH}" == "" ]]; then
     echo "CC = '${CC}'" >> cantera.conf
     echo "CXX = '${CXX}'" >> cantera.conf
     echo "cc_flags = '${CFLAGS}'" >> cantera.conf
-    echo "cxx_flags = '${CPPFLAGS}'" >> cantera.conf
 else
     echo ${PREFIX}
     echo "CC = '${CLANG}'" >> cantera.conf
     echo "CXX = '${CLANGXX}'" >> cantera.conf
     echo "cc_flags = '${CFLAGS} -isysroot ${CONDA_BUILD_SYSROOT}'" >> cantera.conf
-    echo "cxx_flags = '${CPPFLAGS} -isysroot ${CONDA_BUILD_SYSROOT}'" >> cantera.conf
+    echo "cxx_flags = '-std=c++17 -D_LIBCPP_DISABLE_AVAILABILITY'" >> cantera.conf
     echo "no_debug_linker_flags = '-isysroot ${CONDA_BUILD_SYSROOT}'" >> cantera.conf
 fi
 
