@@ -14,7 +14,7 @@ source:
   - configure-hdf5.patch  # [build_platform != target_platform]
 
 build:
-  number: 1
+  number: 2
   include_recipe: True
 
 requirements:
@@ -27,7 +27,7 @@ requirements:
     - setuptools
   host:
     - python >=3.8
-    - boost-cpp
+    - libboost-devel
     - numpy
     - fmt
     - eigen
@@ -46,7 +46,7 @@ outputs:
     build:
       ignore_run_exports_from:
         # only the header part of these libraries are used
-        - boost-cpp
+        - libboost-headers
         - python
     requirements:
       build:
@@ -58,7 +58,7 @@ outputs:
         - setuptools
       host:
         - python >=3.8
-        - boost-cpp
+        - libboost-headers
         - numpy
         - fmt
         - eigen
@@ -84,7 +84,7 @@ outputs:
     build:
       ignore_run_exports_from:
         # only the header part of these libraries are used
-        - boost-cpp
+        - libboost-headers
         - python
     requirements:
       build:
@@ -98,7 +98,7 @@ outputs:
         - python >=3.8
         - setuptools
         - pip
-        - boost-cpp
+        - libboost-headers
         - numpy
         - fmt
         - eigen
@@ -137,7 +137,7 @@ outputs:
     build:
       ignore_run_exports_from:
         # only the header part of these libraries are used
-        - boost-cpp
+        - libboost-headers
     requirements:
       build:
         - python                                 # [build_platform != target_platform]
@@ -153,7 +153,7 @@ outputs:
         - python {{ python }}
         - pip
         - setuptools
-        - boost-cpp
+        - libboost-headers
         - numpy
         - fmt
         - eigen
