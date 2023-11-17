@@ -14,7 +14,7 @@ source:
   - configure-hdf5.patch  # [build_platform != target_platform]
 
 build:
-  number: 2
+  number: 3
   include_recipe: True
 
 requirements:
@@ -170,7 +170,7 @@ outputs:
         - python
         - setuptools
         - {{ pin_compatible('numpy') }}
-        - ruamel_yaml
+        - ruamel.yaml
         - libcantera {{ version }}
     build:
       entry_points:
