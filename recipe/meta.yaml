@@ -14,7 +14,7 @@ source:
   - configure-hdf5.patch  # [build_platform != target_platform]
 
 build:
-  number: 2
+  number: 3
   include_recipe: True
 
 requirements:
@@ -32,7 +32,9 @@ requirements:
     - fmt
     - eigen
     - yaml-cpp
-    - sundials ==6.6
+    # TODO: Relax version constraint after a SUNDIALS release that includes
+    # https://github.com/LLNL/sundials/pull/343 is available
+    - sundials ==6.6.2
     - hdf5 >=1.14
     - highfive >=2.7
     - pywin32  # [win]
@@ -63,7 +65,9 @@ outputs:
         - fmt
         - eigen
         - yaml-cpp
-        - sundials ==6.6
+        # TODO: Relax version constraint after a SUNDIALS release that includes
+        # https://github.com/LLNL/sundials/pull/343 is available
+        - sundials ==6.6.2
         - hdf5 >=1.14
         - highfive >=2.7
         - pywin32  # [win]
@@ -71,6 +75,10 @@ outputs:
         - liblapack
       run:
         - hdf5 >=1.14
+        # TODO: Remove after a SUNDIALS release that includes
+        # https://github.com/LLNL/sundials/pull/343 is available (will be correctly
+        # handled by the sundials recipe)
+        - sundials ==6.6.2
     test:
       commands:
         - echo "STARTING TESTS"
@@ -103,7 +111,9 @@ outputs:
         - fmt
         - eigen
         - yaml-cpp
-        - sundials ==6.6
+        # TODO: Relax version constraint after a SUNDIALS release that includes
+        # https://github.com/LLNL/sundials/pull/343 is available
+        - sundials ==6.6.2
         - pywin32  # [win]
         - libcantera {{ version }}
         - libblas
@@ -112,6 +122,10 @@ outputs:
         - eigen
         - fmt
         - libcantera {{ version }}
+        # TODO: Remove after a SUNDIALS release that includes
+        # https://github.com/LLNL/sundials/pull/343 is available (will be correctly
+        # handled by the sundials recipe)
+        - sundials ==6.6.2
     test:
       requires:
         - cmake
@@ -158,7 +172,9 @@ outputs:
         - fmt
         - eigen
         - yaml-cpp
-        - sundials ==6.6
+        # TODO: Relax version constraint after a SUNDIALS release that includes
+        # https://github.com/LLNL/sundials/pull/343 is available
+        - sundials ==6.6.2
         - pywin32  # [win]
         - cython
         # These two are added here so that conda-build doesn't package their files into cantera too
@@ -170,7 +186,11 @@ outputs:
         - python
         - setuptools
         - {{ pin_compatible('numpy') }}
-        - ruamel_yaml
+        # TODO: Remove after a SUNDIALS release that includes
+        # https://github.com/LLNL/sundials/pull/343 is available (will be correctly
+        # handled by the sundials recipe)
+        - sundials ==6.6.2
+        - ruamel.yaml
         - libcantera {{ version }}
     build:
       entry_points:
