@@ -1,3 +1,7 @@
+#!/bin/bash
+
+set -ex
+
 echo "******************************"
 echo "PYTHON ${PY_VER} BUILD STARTED"
 echo "******************************"

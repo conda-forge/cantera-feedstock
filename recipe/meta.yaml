@@ -13,6 +13,7 @@ source:
   - iomp5-macos.patch  # [osx and not arm64]
   - configure-hdf5.patch  # [build_platform != target_platform]
   - 1604.diff
+  - ver.diff
 
 build:
   number: 4
