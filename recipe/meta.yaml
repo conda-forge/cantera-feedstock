@@ -16,7 +16,7 @@ source:
   - ver.diff
 
 build:
-  number: 5
+  number: 6
   include_recipe: True
 
 requirements:
