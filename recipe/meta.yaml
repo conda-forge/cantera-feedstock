@@ -16,7 +16,7 @@ source:
   - ver.diff
 
 build:
-  number: 5
+  number: 6
   include_recipe: True
 
 requirements:
@@ -191,7 +191,6 @@ outputs:
       run:
         - python
         - setuptools
-        - {{ pin_compatible('numpy') }}
         # TODO: Remove after a SUNDIALS release that includes
         # https://github.com/LLNL/sundials/pull/343 is available (will be correctly
         # handled by the sundials recipe)
