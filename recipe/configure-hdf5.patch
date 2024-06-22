@@ -1,17 +1,17 @@
-From 228566305ae045fada15651d3bcf18eb92a8d643 Mon Sep 17 00:00:00 2001
-From: Ray Speth <speth@mit.edu>
-Date: Tue, 15 Aug 2023 19:15:24 -0400
-Subject: [PATCH 3/4] Disable configure checks for HDF5
+From 4bbaed86256774cbcaa2902bcb7a826b05f1cb77 Mon Sep 17 00:00:00 2001
+From: Bryan Weber <bryan.w.weber@gmail.com>
+Date: Fri, 21 Jun 2024 20:31:54 -0400
+Subject: [PATCH 2/3] Disable configure checks for HDF5
 
 ---
  SConstruct | 89 ++----------------------------------------------------
  1 file changed, 3 insertions(+), 86 deletions(-)
 
 diff --git a/SConstruct b/SConstruct
-index 67d1dc37f..cdb62d837 100644
+index c149d164e..829b06e53 100644
 --- a/SConstruct
 +++ b/SConstruct
-@@ -1457,92 +1457,9 @@ if env["hdf_libdir"]:
+@@ -1441,92 +1441,9 @@ if env["hdf_libdir"]:
      if env["use_rpath_linkage"]:
          env.Append(RPATH=env["hdf_libdir"])
  
@@ -74,7 +74,7 @@ index 67d1dc37f..cdb62d837 100644
 -        h5_version = Path(cmake_lists).read_text()
 -        h5_version = [line for line in h5_version.split("\n")
 -                      if line.startswith("project(HighFive")]
--        return re.search('[0-9]+\.[0-9]+\.[0-9]+', h5_version[0]).group(0)
+-        return re.search(r'[0-9]+\.[0-9]+\.[0-9]+', h5_version[0]).group(0)
 -
 -    env["HIGHFIVE_VERSION"] = highfive_version("ext/HighFive/CMakeLists.txt")
 -    highfive_include = '"../ext/HighFive/include/highfive/H5DataType.hpp"'
@@ -108,5 +108,5 @@ index 67d1dc37f..cdb62d837 100644
  def set_fortran(pattern, value):
      # Set compiler / flags for all Fortran versions to be the same
 -- 
-2.39.2 (Apple Git-143)
+2.45.2
 

@@ -1,17 +1,17 @@
-From 968c9c6118ef533fca25c51e3c1e26c434261d7c Mon Sep 17 00:00:00 2001
-From: Ray Speth <speth@mit.edu>
-Date: Tue, 15 Aug 2023 18:54:16 -0400
-Subject: [PATCH] Remove check for iomp5
+From 6d148584193e623b34a4bd83d793132eb02ba9b2 Mon Sep 17 00:00:00 2001
+From: Bryan Weber <bryan.w.weber@gmail.com>
+Date: Fri, 21 Jun 2024 20:32:33 -0400
+Subject: [PATCH 3/3] Remove check for iomp5
 
 ---
  SConstruct | 12 +-----------
  1 file changed, 1 insertion(+), 11 deletions(-)
 
 diff --git a/SConstruct b/SConstruct
-index 7588630f3..e7ab6ae1d 100644
+index 829b06e53..179b9d5f1 100644
 --- a/SConstruct
 +++ b/SConstruct
-@@ -1296,17 +1296,7 @@ else:
+@@ -1289,17 +1289,7 @@ else:
      env['cxx_stdlib'] = []
  
  env['HAS_CLANG'] = conf.CheckDeclaration('__clang__', '', 'C++')
@@ -26,10 +26,10 @@ index 7588630f3..e7ab6ae1d 100644
 -else:
 -    env["HAS_OPENMP"] = False
 -    logger.info("Not checking for OpenMP support due to using XCode compiler.")
-+env['HAS_OPENMP'] = False
++env["HAS_OPENMP"] = False
  
  # check BLAS/LAPACK installations
  if env["system_blas_lapack"] == "n":
 -- 
-2.39.2 (Apple Git-143)
+2.45.2
 
