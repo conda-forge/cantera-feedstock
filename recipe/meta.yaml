@@ -1,22 +1,20 @@
-{% set version = "3.0.0" %}
+{% set version = "3.0.1" %}
 
 package:
   name: cantera-recipe
   version: {{ version }}
 
 source:
-  url: https://github.com/Cantera/cantera/archive/v{{ version }}.tar.gz
-  sha256: 6d17cdef21dae9deaf91351260b68ccf7e264c37c6030c9d4bf26a2cefb2b905
+  url: https://github.com/Cantera/cantera/archive/v3.0.1.tar.gz
+  sha256: 3c51803c2d776e4cb2fed14d5eb17b2fa78a274d0e54d87eb91f23afe3cc4a8c
   patches:
   # https://github.com/conda-forge/cantera-feedstock/pull/13#issuecomment-809382526
   - cross-compile.patch  # [build_platform != target_platform]
   - iomp5-macos.patch  # [osx and not arm64]
   - configure-hdf5.patch  # [build_platform != target_platform]
-  - 1604.diff
-  - ver.diff
 
 build:
-  number: 5
+  number: 7
   include_recipe: True
 
 requirements:
@@ -35,9 +33,7 @@ requirements:
     - fmt
     - eigen
     - yaml-cpp
-    # TODO: Relax version constraint after a SUNDIALS release that includes
-    # https://github.com/LLNL/sundials/pull/343 is available
-    - sundials ==6.6.2
+    - sundials >=6.7.0
     - hdf5 >=1.14
     - highfive >=2.7
     - pywin32  # [win]
@@ -69,9 +65,7 @@ outputs:
         - fmt
         - eigen
         - yaml-cpp
-        # TODO: Relax version constraint after a SUNDIALS release that includes
-        # https://github.com/LLNL/sundials/pull/343 is available
-        - sundials ==6.6.2
+        - sundials >=6.7.0
         - hdf5 >=1.14
         - highfive >=2.7
         - pywin32  # [win]
@@ -79,10 +73,6 @@ outputs:
         - liblapack
       run:
         - hdf5 >=1.14
-        # TODO: Remove after a SUNDIALS release that includes
-        # https://github.com/LLNL/sundials/pull/343 is available (will be correctly
-        # handled by the sundials recipe)
-        - sundials ==6.6.2
     test:
       commands:
         - echo "STARTING TESTS"
@@ -116,21 +106,15 @@ outputs:
         - fmt
         - eigen
         - yaml-cpp
-        # TODO: Relax version constraint after a SUNDIALS release that includes
-        # https://github.com/LLNL/sundials/pull/343 is available
-        - sundials ==6.6.2
+        - sundials >=6.7.0
         - pywin32  # [win]
-        - libcantera {{ version }}
+        - libcantera =={{ version }}
         - libblas
         - liblapack
       run:
         - eigen
         - fmt
-        - libcantera {{ version }}
-        # TODO: Remove after a SUNDIALS release that includes
-        # https://github.com/LLNL/sundials/pull/343 is available (will be correctly
-        # handled by the sundials recipe)
-        - sundials ==6.6.2
+        - libcantera =={{ version }}
     test:
       requires:
         - cmake
@@ -178,26 +162,19 @@ outputs:
         - fmt
         - eigen
         - yaml-cpp
-        # TODO: Relax version constraint after a SUNDIALS release that includes
-        # https://github.com/LLNL/sundials/pull/343 is available
-        - sundials ==6.6.2
+        - sundials >=6.7.0
         - pywin32  # [win]
         - cython
         # These two are added here so that conda-build doesn't package their files into cantera too
-        - libcantera-devel {{ version }}
-        - libcantera {{ version }}
+        - libcantera-devel =={{ version }}
+        - libcantera =={{ version }}
         - libblas
         - liblapack
       run:
         - python
         - setuptools
-        - {{ pin_compatible('numpy') }}
-        # TODO: Remove after a SUNDIALS release that includes
-        # https://github.com/LLNL/sundials/pull/343 is available (will be correctly
-        # handled by the sundials recipe)
-        - sundials ==6.6.2
         - ruamel.yaml
-        - libcantera {{ version }}
+        - libcantera =={{ version }}
     build:
       entry_points:
         - ck2yaml = cantera.ck2yaml:script_entry_point
@@ -209,7 +186,7 @@ outputs:
       requires:
         - pytest
         - pint
-        - libcantera-devel {{ version }}
+        - libcantera-devel =={{ version }}
         - cmake
         - make  # [not win]
         - scons
