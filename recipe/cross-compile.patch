@@ -181,7 +181,7 @@ index 25483148d..efcea8f54 100644
 
      # Determine whether or not Sundials was built with BLAS/LAPACK
      if sundials_ver < parse_version('5.5'):
-@@ -1464,102 +1345,9 @@ else: # env['system_sundials'] == 'n'
+@@ -1464,102 +1345,10 @@ else: # env['system_sundials'] == 'n'
      env['sundials_version'] = '5.3'
      env['has_sundials_lapack'] = int(env['use_lapack'])
 
@@ -284,6 +284,7 @@ index 25483148d..efcea8f54 100644
 +env["system_highfive"] = True
 +env["use_hdf5"] = True
 +env["highfive_boolean"] = True
++env["hdf5_lib"] = "hdf5"
 
  def set_fortran(pattern, value):
      # Set compiler / flags for all Fortran versions to be the same
