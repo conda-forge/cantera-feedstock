@@ -1,12 +1,12 @@
-{% set version = "3.0.1" %}
+{% set version = "3.1.0a2" %}
 
 package:
   name: cantera-recipe
   version: {{ version }}
 
 source:
-  url: https://github.com/Cantera/cantera/archive/v3.0.1.tar.gz
-  sha256: 3c51803c2d776e4cb2fed14d5eb17b2fa78a274d0e54d87eb91f23afe3cc4a8c
+  url: https://github.com/Cantera/cantera/archive/ded4513c8bda1b07f053db72e68e44c6cbb40da5.tar.gz
+  sha256: 5ae141f60f0c1458b687b18ac4c16dac215aff681f236229f2bea898969e266b
   patches:
   - fmt-11-support.patch
   - link-fmt.patch
@@ -16,7 +16,7 @@ source:
   - configure-hdf5.patch  # [build_platform != target_platform]
 
 build:
-  number: 8
+  number: 0
   include_recipe: True
 
 requirements:
@@ -35,7 +35,7 @@ requirements:
     - fmt
     - eigen
     - yaml-cpp
-    - sundials >=6.7.0
+    - sundials ==7.0.0
     - hdf5 >=1.14
     - highfive >=2.7
     - pywin32  # [win]
@@ -67,7 +67,7 @@ outputs:
         - fmt
         - eigen
         - yaml-cpp
-        - sundials >=6.7.0
+        - sundials ==7.0.0
         - hdf5 >=1.14
         - highfive >=2.7
         - pywin32  # [win]
@@ -108,14 +108,14 @@ outputs:
         - fmt
         - eigen
         - yaml-cpp
-        - sundials >=6.7.0
+        - sundials ==7.0.0
         - pywin32  # [win]
         - libcantera =={{ version }}
         - libblas
         - liblapack
       run:
-        - eigen
-        - fmt
+        # - eigen
+        # - fmt
         - libcantera =={{ version }}
     test:
       requires:
@@ -164,7 +164,7 @@ outputs:
         - fmt
         - eigen
         - yaml-cpp
-        - sundials >=6.7.0
+        - sundials ==7.0.0
         - pywin32  # [win]
         - cython
         # These two are added here so that conda-build doesn't package their files into cantera too
@@ -179,7 +179,7 @@ outputs:
         - libcantera =={{ version }}
     build:
       entry_points:
-        - ck2yaml = cantera.ck2yaml:script_entry_point
+        - ck2yaml = cantera.ck2yaml:main
         - cti2yaml = cantera.cti2yaml:main
         - ctml2yaml = cantera.ctml2yaml:main
         - yaml2ck = cantera.yaml2ck:main
