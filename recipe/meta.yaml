@@ -11,7 +11,6 @@ source:
     # https://github.com/conda-forge/cantera-feedstock/pull/13#issuecomment-809382526
     - cross-compile.patch  # [build_platform != target_platform]
     - iomp5-macos.patch  # [osx and not arm64]
-    - configure-hdf5.patch  # [build_platform != target_platform]
   - url: https://github.com/Cantera/cantera-example-data/archive/dbc42129c998c3a977dfa2a8b779851776fb2982.tar.gz
     sha256: 4e282ce75354566e344b2d23d4b1c4574d781fe3aa3682baea4a31dff66aa293
     folder: data/example_data
