@@ -11,7 +11,7 @@ diff --git a/SConstruct b/SConstruct
 index efcea8f54..3a994b159 100644
 --- a/SConstruct
 +++ b/SConstruct
-@@ -1220,17 +1220,6 @@ else:
+@@ -1220,17 +1220,7 @@ else:
      env['cxx_stdlib'] = []
  
  env['HAS_CLANG'] = conf.CheckDeclaration('__clang__', '', 'C++')
@@ -26,9 +26,9 @@ index efcea8f54..3a994b159 100644
 -else:
 -    env["HAS_OPENMP"] = False
 -    logger.info("Not checking for OpenMP support due to using XCode compiler.")
++env["HAS_OPENMP"] = False
  
  # check BLAS/LAPACK installations
  if env["system_blas_lapack"] == "n":
 -- 
 2.45.2
-
