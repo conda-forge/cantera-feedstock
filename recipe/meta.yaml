@@ -8,6 +8,7 @@ source:
   url: https://github.com/Cantera/cantera/archive/v3.0.1.tar.gz
   sha256: 3c51803c2d776e4cb2fed14d5eb17b2fa78a274d0e54d87eb91f23afe3cc4a8c
   patches:
+  - fmt-11-support.patch
   # https://github.com/conda-forge/cantera-feedstock/pull/13#issuecomment-809382526
   - cross-compile.patch  # [build_platform != target_platform]
   - iomp5-macos.patch  # [osx and not arm64]
