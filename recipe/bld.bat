@@ -4,12 +4,6 @@ echo ****************************
 echo BUILD STARTED
 echo ****************************
 
-REM IF %ARCH% EQU 64 (
-REM    CALL "%VS141COMNTOOLS%"\..\..\VC\bin\amd64\vcvars64.bat
-REM ) ELSE (
-REM    CALL "%VS150COMNTOOLS%"\..\..\VC\bin\vcvars32.bat
-REM )
-
 :: Have to use CALL to prevent the script from exiting after calling SCons
 CALL scons clean
 IF %ERRORLEVEL% NEQ 0 EXIT 1
