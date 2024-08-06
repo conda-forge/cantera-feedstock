@@ -149,6 +149,8 @@ outputs:
         - scons >=4.1
         - setuptools
         - packaging
+        # - numpy                                  # [build_platform != target_platform]
+        # - cython                                 # [build_platform != target_platform]
         - pip
       host:
         - python {{ python }}
