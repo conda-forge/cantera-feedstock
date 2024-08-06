@@ -1,4 +1,4 @@
-{% set version = "3.1.0a2" %}
+{% set version = "3.1.0a3" %}
 
 package:
   name: cantera-recipe
@@ -173,7 +173,6 @@ outputs:
         - liblapack
       run:
         - python
-        - setuptools
         - ruamel.yaml
         - libcantera =={{ version }}
     build:
