@@ -27,7 +27,8 @@ requirements:
   host:
     - python >=3.8
     - libboost-devel
-    - numpy
+    - llvm-openmp  # [osx]
+    # - numpy
     - fmt
     - eigen
     - yaml-cpp
@@ -59,7 +60,8 @@ outputs:
       host:
         - python >=3.8
         - libboost-headers
-        - numpy
+        - llvm-openmp  # [osx]
+        # - numpy
         - fmt
         - eigen
         - yaml-cpp
@@ -97,10 +99,10 @@ outputs:
         - packaging
       host:
         - python >=3.8
-        - setuptools
-        - pip
+        # - setuptools
+        # - pip
         - libboost-headers
-        - numpy
+        # - numpy
         - fmt
         - eigen
         - yaml-cpp
