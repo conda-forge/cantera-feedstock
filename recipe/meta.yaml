@@ -23,7 +23,7 @@ requirements:
     - {{ stdlib("c") }}
     - {{ compiler('cxx') }}
     - scons >=4.1
-    - setuptools
+    - packaging
   host:
     - python >=3.8
     - libboost-devel
@@ -55,7 +55,7 @@ outputs:
         - {{ stdlib("c") }}
         - {{ compiler('cxx') }}
         - scons >=4.1
-        - setuptools
+        - packaging
       host:
         - python >=3.8
         - libboost-headers
@@ -94,7 +94,7 @@ outputs:
         - {{ stdlib("c") }}
         - {{ compiler('cxx') }}
         - scons >=4.1
-        - setuptools
+        - packaging
       host:
         - python >=3.8
         - setuptools
@@ -150,11 +150,13 @@ outputs:
         - setuptools
         - numpy                                  # [build_platform != target_platform]
         - cython                                 # [build_platform != target_platform]
+        - packaging
         - pip
       host:
         - python {{ python }}
         - pip
         - setuptools
+        - packaging
         - libboost-headers
         - numpy
         - fmt
