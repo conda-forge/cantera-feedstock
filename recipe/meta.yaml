@@ -5,12 +5,8 @@ package:
   version: {{ version }}
 
 source:
-  - url: https://github.com/Cantera/cantera/archive/ded4513c8bda1b07f053db72e68e44c6cbb40da5.tar.gz
-    sha256: 5ae141f60f0c1458b687b18ac4c16dac215aff681f236229f2bea898969e266b
-    patches:
-    # https://github.com/conda-forge/cantera-feedstock/pull/13#issuecomment-809382526
-    - cross-compile.patch  # [build_platform != target_platform]
-    - iomp5-macos.patch  # [osx and not arm64]
+  - url: https://github.com/Cantera/cantera/archive/984488b13c85ef70948f16d58bbcbc5c74cc7a56.tar.gz
+    sha256: 274571623a5f9eeeae9292de7f2deecd34cd7e22d49c0301f851c410a860ddb7
   - url: https://github.com/Cantera/cantera-example-data/archive/dbc42129c998c3a977dfa2a8b779851776fb2982.tar.gz
     sha256: 4e282ce75354566e344b2d23d4b1c4574d781fe3aa3682baea4a31dff66aa293
     folder: data/example_data
