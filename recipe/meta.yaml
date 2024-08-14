@@ -45,10 +45,9 @@ outputs:
     script: build_lib.sh  # [not win]
     script: build_lib.bat  # [win]
     build:
-      ignore_run_exports_from:
+      ignore_run_exports:
         # only the header part of these libraries are used
         - libboost-headers
-        - python
     requirements:
       build:
         - python                                 # [build_platform != target_platform]
@@ -86,10 +85,9 @@ outputs:
     script: build_devel.sh  # [not win]
     script: build_devel.bat  # [win]
     build:
-      ignore_run_exports_from:
+      ignore_run_exports:
         # only the header part of these libraries are used
         - libboost-headers
-        - python
     requirements:
       build:
         - python                                 # [build_platform != target_platform]
@@ -140,7 +138,7 @@ outputs:
     script: build_py.sh  # [not win]
     script: build_py.bat  # [win]
     build:
-      ignore_run_exports_from:
+      ignore_run_exports:
         # only the header part of these libraries are used
         - libboost-headers
     requirements:
