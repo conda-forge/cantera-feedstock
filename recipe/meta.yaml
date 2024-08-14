@@ -17,17 +17,14 @@ build:
 
 requirements:
   build:
-    - python                                 # [build_platform != target_platform]
-    - cross-python_{{ target_platform }}     # [build_platform != target_platform]
+    - python
     - {{ compiler('c') }}
     - {{ stdlib("c") }}
     - {{ compiler('cxx') }}
     - scons >=4.1
     - packaging
   host:
-    - python >=3.8
     - libboost-devel
-    - numpy
     - fmt
     - eigen
     - yaml-cpp
@@ -50,17 +47,14 @@ outputs:
         - libboost-headers
     requirements:
       build:
-        - python                                 # [build_platform != target_platform]
-        - cross-python_{{ target_platform }}     # [build_platform != target_platform]
+        - python
         - {{ compiler('c') }}
         - {{ stdlib("c") }}
         - {{ compiler('cxx') }}
         - scons >=4.1
         - packaging
       host:
-        - python >=3.8
         - libboost-headers
-        - numpy
         - fmt
         - eigen
         - yaml-cpp
@@ -74,6 +68,7 @@ outputs:
         - libgomp      # [linux]
       run:
         - hdf5 >=1.14
+        - fmt
     test:
       commands:
         - echo "STARTING TESTS"
@@ -90,19 +85,14 @@ outputs:
         - libboost-headers
     requirements:
       build:
-        - python                                 # [build_platform != target_platform]
-        - cross-python_{{ target_platform }}     # [build_platform != target_platform]
+        - python
         - {{ compiler('c') }}
         - {{ stdlib("c") }}
         - {{ compiler('cxx') }}
         - scons >=4.1
         - packaging
       host:
-        - python >=3.8
-        - setuptools
-        - pip
         - libboost-headers
-        - numpy
         - fmt
         - eigen
         - yaml-cpp
@@ -115,6 +105,7 @@ outputs:
         - libgomp      # [linux]
       run:
         - libcantera =={{ version }}
+        - eigen
     test:
       requires:
         - cmake
@@ -124,7 +115,7 @@ outputs:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
         - numpy
-        - python {{ python }}
+        - python
       files:
         - test-lib
       commands:
@@ -143,19 +134,19 @@ outputs:
         - libboost-headers
     requirements:
       build:
-        - python                                 # [build_platform != target_platform]
+        - python
         - cross-python_{{ target_platform }}     # [build_platform != target_platform]
+        # These are needed to support cross-compiling. See
+        # https://conda-forge.org/docs/maintainer/knowledge_base/#details-about-cross-compiled-python-packages
+        - numpy                                  # [build_platform != target_platform]
+        - cython                                 # [build_platform != target_platform]
         - {{ compiler('c') }}
         - {{ stdlib("c") }}
         - {{ compiler('cxx') }}
         - scons >=4.1
-        - setuptools
-        - numpy                                  # [build_platform != target_platform]
-        - cython                                 # [build_platform != target_platform]
         - packaging
-        - pip
       host:
-        - python {{ python }}
+        - python
         - pip
         - setuptools
         - packaging
