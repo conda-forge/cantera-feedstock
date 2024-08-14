@@ -37,6 +37,8 @@ requirements:
     - pywin32  # [win]
     - libblas
     - liblapack
+    - llvm-openmp  # [osx]
+    - libgomp      # [linux]
 
 outputs:
   - name: libcantera
@@ -69,6 +71,8 @@ outputs:
         - pywin32  # [win]
         - libblas
         - liblapack
+        - llvm-openmp  # [osx]
+        - libgomp      # [linux]
       run:
         - hdf5 >=1.14
     test:
@@ -109,9 +113,9 @@ outputs:
         - libcantera =={{ version }}
         - libblas
         - liblapack
+        - llvm-openmp  # [osx]
+        - libgomp      # [linux]
       run:
-        - eigen
-        - fmt
         - libcantera =={{ version }}
     test:
       requires:
@@ -170,6 +174,8 @@ outputs:
         - libcantera =={{ version }}
         - libblas
         - liblapack
+        - llvm-openmp  # [osx]
+        - libgomp      # [linux]
       run:
         - python
         - ruamel.yaml
