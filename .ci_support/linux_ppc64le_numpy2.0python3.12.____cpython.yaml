@@ -23,7 +23,7 @@ fmt:
 libblas:
 - 3.9 *netlib
 libboost_devel:
-- '1.84'
+- '1.86'
 liblapack:
 - 3.9 *netlib
 numpy:
