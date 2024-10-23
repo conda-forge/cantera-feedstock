@@ -187,7 +187,7 @@ outputs:
     test:
       requires:
         - pytest
-        - pint
+        - pint  # [py<313]
         - libcantera-devel =={{ version }}
         - cmake
         - make  # [not win]
