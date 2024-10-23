@@ -187,6 +187,7 @@ outputs:
     test:
       requires:
         - pytest
+        # Needs https://github.com/hgrecco/pint/issues/1969 for Python 3.13:
         - pint  # [py<313]
         - libcantera-devel =={{ version }}
         - cmake
