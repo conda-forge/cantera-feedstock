@@ -1,13 +1,10 @@
 #!/bin/bash
 
-die () {
-    echo >&2 "$@"
-    exit 1
-}
+set -ex
 
 # Pretend we're on a modern macOS
-unset MACOSX_DEPLOYMENT_TARGET
-unset MACOSX_SDK_VERSION
+# unset MACOSX_DEPLOYMENT_TARGET
+# unset MACOSX_SDK_VERSION
 
 BASEDIR=`pwd`
 export CANTERA_DATA=${BASEDIR}/test-lib
@@ -26,7 +23,7 @@ mkdir build
 cd build
 cmake ..
 cmake --build .
-./demo || die "extensiblerate-cmake failed"
+./demo
 
 echo -e '\n***** Testing ExtensibleRate with SCons *****\n'
 cd ${BASEDIR}/cxx_demo
@@ -34,4 +31,4 @@ echo "==="
 cat SConstruct
 echo "==="
 scons
-./demo || die "extensiblerate-scons failed"
+./demo
