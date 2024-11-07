@@ -16,7 +16,7 @@ source:
   - configure-hdf5.patch  # [build_platform != target_platform]
 
 build:
-  number: 10
+  number: 11
   include_recipe: True
 
 requirements:
@@ -187,8 +187,7 @@ outputs:
     test:
       requires:
         - pytest
-        # Needs https://github.com/hgrecco/pint/issues/1969 for Python 3.13:
-        - pint  # [py<313]
+        - pint
         - libcantera-devel =={{ version }}
         - cmake
         - make  # [not win]
