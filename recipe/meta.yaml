@@ -1,23 +1,23 @@
 # When this version is updated, make sure to update the CT_GIT_COMMIT variable in
 # the build/script_env section.
-{% set version = "3.1.0a4" %}
+{% set version = "3.1.0b1" %}
 
 package:
   name: cantera-recipe
   version: {{ version }}
 
 source:
-  - url: https://github.com/Cantera/cantera/archive/50f2896b940d1fbdbde28cfc392abea22ada8e55.tar.gz
-    sha256: 1dd2a7af5add3739a2e047a64bc596ef1d6430f509ae20bcbfd620bc7b3fa5ab
-  - url: https://github.com/Cantera/cantera-example-data/archive/dbc42129c998c3a977dfa2a8b779851776fb2982.tar.gz
-    sha256: 4e282ce75354566e344b2d23d4b1c4574d781fe3aa3682baea4a31dff66aa293
+  - url: https://github.com/Cantera/cantera/archive/70521b741bbb2e950ea10eac5580276bdd76d813.tar.gz
+    sha256: 6efe3781376f75bb96916c8f657c329145969c8787f86bd3d976716be50842f7
+  - url: https://github.com/Cantera/cantera-example-data/archive/1a5d27e508a38b1791543e9fded80ffd5c5b8d75.tar.gz
+    sha256: 5fddd7a883a5034c4579801cde81bbba63edfbd8e462db10297b932cfacb7d9b
     folder: data/example_data
 
 build:
-  number: 1
+  number: 0
   include_recipe: True
   script_env:
-    - "CT_GIT_COMMIT=50f2896b940d1fbdbde28cfc392abea22ada8e55"
+    - "CT_GIT_COMMIT=70521b741bbb2e950ea10eac5580276bdd76d813"
 
 # The requirements for Python and NumPy are mandatory in this section because that's
 # how conda smithy rendering of this recipe produces one build configuration for each
@@ -219,7 +219,7 @@ outputs:
         - ck2yaml --help
         - ctml2yaml --help
         - yaml2ck --help
-        - ./test-lib/test-extensiblerate.sh  # [not win and build_platform == target_platform and not (osx and x86_64 and py == 310)]
+        - ./test-lib/test-extensiblerate.sh  # [not win and build_platform == target_platform and not (osx and x86_64 and (py == 310 or py == 312))]
         - call test-lib\test-extensiblerate.bat  # [win]
 
 about:
