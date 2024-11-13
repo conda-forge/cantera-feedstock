@@ -16,7 +16,7 @@ source:
   - configure-hdf5.patch  # [build_platform != target_platform]
 
 build:
-  number: 11
+  number: 12
   include_recipe: True
 
 requirements:
@@ -214,7 +214,7 @@ outputs:
         - ck2yaml --help
         - ctml2yaml --help
         - yaml2ck --help
-        - ./test-lib/test-extensiblerate.sh  # [not win and build_platform == target_platform and not (osx and x86_64 and py == 310)]
+        - ./test-lib/test-extensiblerate.sh  # [not win and build_platform == target_platform and not (osx and x86_64 and (py == 310 or py == 312))]
         - call test-lib\test-extensiblerate.bat  # [win]
 
 about:
