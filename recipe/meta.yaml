@@ -16,7 +16,7 @@ source:
   - configure-hdf5.patch  # [build_platform != target_platform]
 
 build:
-  number: 12
+  number: 13
   include_recipe: True
 
 requirements:
@@ -110,13 +110,13 @@ outputs:
         - yaml-cpp
         - sundials >=6.7.0
         - pywin32  # [win]
-        - libcantera =={{ version }}
+        - {{ pin_subpackage('libcantera', exact=True) }}
         - libblas
         - liblapack
       run:
         - eigen
         - fmt
-        - libcantera =={{ version }}
+        - {{ pin_subpackage('libcantera', exact=True) }}
     test:
       requires:
         - cmake
@@ -168,15 +168,15 @@ outputs:
         - pywin32  # [win]
         - cython
         # These two are added here so that conda-build doesn't package their files into cantera too
-        - libcantera-devel =={{ version }}
-        - libcantera =={{ version }}
+        - {{ pin_subpackage('libcantera-devel', exact=True) }}
+        - {{ pin_subpackage('libcantera', exact=True) }}
         - libblas
         - liblapack
       run:
         - python
         - setuptools
         - ruamel.yaml
-        - libcantera =={{ version }}
+        - {{ pin_subpackage('libcantera', exact=True) }}
     build:
       entry_points:
         - ck2yaml = cantera.ck2yaml:script_entry_point
@@ -188,7 +188,7 @@ outputs:
       requires:
         - pytest
         - pint
-        - libcantera-devel =={{ version }}
+        - {{ pin_subpackage('libcantera-devel', exact=True) }}
         - cmake
         - make  # [not win]
         - scons
