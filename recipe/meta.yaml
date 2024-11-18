@@ -111,14 +111,15 @@ outputs:
         - yaml-cpp
         - sundials ==7.0.0
         - pywin32  # [win]
-        - libcantera =={{ version }}
+        - {{ pin_subpackage('libcantera', exact=True) }}
         - libblas
         - liblapack
         - llvm-openmp  # [osx]
         - libgomp      # [linux]
       run:
-        - libcantera =={{ version }}
         - eigen
+        - fmt
+        - {{ pin_subpackage('libcantera', exact=True) }}
     test:
       requires:
         - cmake
@@ -172,8 +173,8 @@ outputs:
         - pywin32  # [win]
         - cython
         # These two are added here so that conda-build doesn't package their files into cantera too
-        - libcantera-devel =={{ version }}
-        - libcantera =={{ version }}
+        - {{ pin_subpackage('libcantera-devel', exact=True) }}
+        - {{ pin_subpackage('libcantera', exact=True) }}
         - libblas
         - liblapack
         - llvm-openmp  # [osx]
@@ -181,7 +182,7 @@ outputs:
       run:
         - python
         - ruamel.yaml
-        - libcantera =={{ version }}
+        - {{ pin_subpackage('libcantera', exact=True) }}
     build:
       entry_points:
         - ck2yaml = cantera.ck2yaml:main
@@ -193,7 +194,7 @@ outputs:
       requires:
         - pytest
         - pint
-        - libcantera-devel =={{ version }}
+        - {{ pin_subpackage('libcantera-devel', exact=True) }}
         - cmake
         - make  # [not win]
         - scons
