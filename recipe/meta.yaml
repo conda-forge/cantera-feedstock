@@ -1,24 +1,30 @@
-{% set version = "3.0.1" %}
+# When this version is updated, make sure to update the CT_GIT_COMMIT variable in
+# the build/script_env section.
+{% set version = "3.1.0" %}
 
 package:
   name: cantera-recipe
   version: {{ version }}
 
 source:
-  url: https://github.com/Cantera/cantera/archive/v3.0.1.tar.gz
-  sha256: 3c51803c2d776e4cb2fed14d5eb17b2fa78a274d0e54d87eb91f23afe3cc4a8c
-  patches:
-  - fmt-11-support.patch
-  - link-fmt.patch
-  # https://github.com/conda-forge/cantera-feedstock/pull/13#issuecomment-809382526
-  - cross-compile.patch  # [build_platform != target_platform]
-  - iomp5-macos.patch  # [osx and not arm64]
-  - configure-hdf5.patch  # [build_platform != target_platform]
+  - url: https://github.com/Cantera/cantera/archive/v3.1.0.tar.gz
+    sha256: 4d9004660d83ea5200216cbd465ae77277fde9191fd47d1eb30a68c1ad6ee09e
+  - url: https://github.com/Cantera/cantera-example-data/archive/1a5d27e508a38b1791543e9fded80ffd5c5b8d75.tar.gz
+    sha256: 5fddd7a883a5034c4579801cde81bbba63edfbd8e462db10297b932cfacb7d9b
+    folder: data/example_data
 
 build:
-  number: 15
+  number: 0
   include_recipe: True
+  script_env:
+    - "CT_GIT_COMMIT=6e0027548cf295bd478b8acfe34816f2db6dd58b"
 
+# The requirements for Python and NumPy are mandatory in this section because that's
+# how conda smithy rendering of this recipe produces one build configuration for each
+# supported Python and NumPy version. There don't seem to be any overlinking warnings
+# from this set of configuration. In addition, the build selector is required for the
+# build/python dependency, even though we require that dependency regardless of whether
+# we're cross-compiling
 requirements:
   build:
     - python                                 # [build_platform != target_platform]
@@ -27,54 +33,55 @@ requirements:
     - {{ stdlib("c") }}
     - {{ compiler('cxx') }}
     - scons >=4.1
-    - setuptools
+    - packaging
   host:
     - python >=3.8
-    - libboost-devel
     - numpy
+    - libboost-devel
     - fmt
     - eigen
     - yaml-cpp
-    - sundials >=6.7.0
+    - sundials ==7.0.0
     - hdf5 >=1.14
     - highfive >=2.7
     - pywin32  # [win]
     - libblas
     - liblapack
+    - llvm-openmp  # [osx]
+    - libgomp      # [linux]
 
 outputs:
   - name: libcantera
     script: build_lib.sh  # [not win]
     script: build_lib.bat  # [win]
     build:
-      ignore_run_exports_from:
+      ignore_run_exports:
         # only the header part of these libraries are used
         - libboost-headers
-        - python
     requirements:
       build:
-        - python                                 # [build_platform != target_platform]
-        - cross-python_{{ target_platform }}     # [build_platform != target_platform]
+        - python
         - {{ compiler('c') }}
         - {{ stdlib("c") }}
         - {{ compiler('cxx') }}
         - scons >=4.1
-        - setuptools
+        - packaging
       host:
-        - python >=3.8
         - libboost-headers
-        - numpy
         - fmt
         - eigen
         - yaml-cpp
-        - sundials >=6.7.0
+        - sundials ==7.0.0
         - hdf5 >=1.14
         - highfive >=2.7
         - pywin32  # [win]
         - libblas
         - liblapack
+        - llvm-openmp  # [osx]
+        - libgomp      # [linux]
       run:
         - hdf5 >=1.14
+        - fmt
     test:
       commands:
         - echo "STARTING TESTS"
@@ -86,33 +93,29 @@ outputs:
     script: build_devel.sh  # [not win]
     script: build_devel.bat  # [win]
     build:
-      ignore_run_exports_from:
+      ignore_run_exports:
         # only the header part of these libraries are used
         - libboost-headers
-        - python
     requirements:
       build:
-        - python                                 # [build_platform != target_platform]
-        - cross-python_{{ target_platform }}     # [build_platform != target_platform]
+        - python
         - {{ compiler('c') }}
         - {{ stdlib("c") }}
         - {{ compiler('cxx') }}
         - scons >=4.1
-        - setuptools
+        - packaging
       host:
-        - python >=3.8
-        - setuptools
-        - pip
         - libboost-headers
-        - numpy
         - fmt
         - eigen
         - yaml-cpp
-        - sundials >=6.7.0
+        - sundials ==7.0.0
         - pywin32  # [win]
         - {{ pin_subpackage('libcantera', exact=True) }}
         - libblas
         - liblapack
+        - llvm-openmp  # [osx]
+        - libgomp      # [linux]
       run:
         - eigen
         - fmt
@@ -126,7 +129,7 @@ outputs:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
         - numpy
-        - python {{ python }}
+        - python
       files:
         - test-lib
       commands:
@@ -140,37 +143,33 @@ outputs:
     script: build_py.sh  # [not win]
     script: build_py.bat  # [win]
     build:
-      ignore_run_exports_from:
+      ignore_run_exports:
         # only the header part of these libraries are used
         - libboost-headers
-      entry_points:
-        - ck2yaml = cantera.ck2yaml:script_entry_point
-        - cti2yaml = cantera.cti2yaml:main
-        - ctml2yaml = cantera.ctml2yaml:main
-        - yaml2ck = cantera.yaml2ck:main
-      include_recipe: True
     requirements:
       build:
         - python                                 # [build_platform != target_platform]
         - cross-python_{{ target_platform }}     # [build_platform != target_platform]
+        # These are needed to support cross-compiling. See
+        # https://conda-forge.org/docs/maintainer/knowledge_base/#details-about-cross-compiled-python-packages
+        - numpy                                  # [build_platform != target_platform]
+        - cython                                 # [build_platform != target_platform]
         - {{ compiler('c') }}
         - {{ stdlib("c") }}
         - {{ compiler('cxx') }}
         - scons >=4.1
-        - setuptools
-        - numpy                                  # [build_platform != target_platform]
-        - cython                                 # [build_platform != target_platform]
-        - pip
+        - packaging
       host:
-        - python {{ python }}
+        - python
         - pip
         - setuptools
+        - packaging
         - libboost-headers
         - numpy
         - fmt
         - eigen
         - yaml-cpp
-        - sundials >=6.7.0
+        - sundials ==7.0.0
         - pywin32  # [win]
         - cython
         # These two are added here so that conda-build doesn't package their files into cantera too
@@ -178,11 +177,19 @@ outputs:
         - {{ pin_subpackage('libcantera', exact=True) }}
         - libblas
         - liblapack
+        - llvm-openmp  # [osx]
+        - libgomp      # [linux]
       run:
         - python
-        - setuptools
         - ruamel.yaml
         - {{ pin_subpackage('libcantera', exact=True) }}
+    build:
+      entry_points:
+        - ck2yaml = cantera.ck2yaml:main
+        - cti2yaml = cantera.cti2yaml:main
+        - ctml2yaml = cantera.ctml2yaml:main
+        - yaml2ck = cantera.yaml2ck:main
+      include_recipe: True
     test:
       requires:
         - pytest
