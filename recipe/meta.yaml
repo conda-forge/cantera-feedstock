@@ -142,10 +142,6 @@ outputs:
   - name: cantera
     script: build_py.sh  # [not win]
     script: build_py.bat  # [win]
-    build:
-      ignore_run_exports:
-        # only the header part of these libraries are used
-        - libboost-headers
     requirements:
       build:
         - python                                 # [build_platform != target_platform]
@@ -184,6 +180,9 @@ outputs:
         - ruamel.yaml
         - {{ pin_subpackage('libcantera', exact=True) }}
     build:
+      ignore_run_exports:
+        # only the header part of these libraries are used
+        - libboost-headers
       entry_points:
         - ck2yaml = cantera.ck2yaml:main
         - cti2yaml = cantera.cti2yaml:main
