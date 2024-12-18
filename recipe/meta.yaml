@@ -41,7 +41,7 @@ requirements:
     - fmt
     - eigen
     - yaml-cpp
-    - sundials ==7.0.0
+    - sundials <8
     - hdf5 >=1.14
     - highfive >=2.7
     - pywin32  # [win]
@@ -71,7 +71,7 @@ outputs:
         - fmt
         - eigen
         - yaml-cpp
-        - sundials ==7.0.0
+        - sundials <8
         - hdf5 >=1.14
         - highfive >=2.7
         - pywin32  # [win]
@@ -109,7 +109,7 @@ outputs:
         - fmt
         - eigen
         - yaml-cpp
-        - sundials ==7.0.0
+        - sundials <8
         - pywin32  # [win]
         - {{ pin_subpackage('libcantera', exact=True) }}
         - libblas
@@ -165,7 +165,7 @@ outputs:
         - fmt
         - eigen
         - yaml-cpp
-        - sundials ==7.0.0
+        - sundials <8
         - pywin32  # [win]
         - cython
         # These two are added here so that conda-build doesn't package their files into cantera too
