@@ -14,7 +14,7 @@ source:
     folder: data/example_data
 
 build:
-  number: 0
+  number: 1
   include_recipe: True
   script_env:
     - "CT_GIT_COMMIT=6e0027548cf295bd478b8acfe34816f2db6dd58b"
