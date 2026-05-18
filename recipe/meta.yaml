@@ -14,7 +14,7 @@ source:
     folder: data/example_data
 
 build:
-  number: 0
+  number: 1
   include_recipe: True
   script_env:
     - "CT_GIT_COMMIT=4a8358eb80cfeb50474386b5f9ec0b3a83519889"
@@ -80,7 +80,7 @@ outputs:
       host:
         - libboost-headers
         - fmt
-        - eigen
+        - eigen-abi-devel
         - yaml-cpp
         - sundials <8
         - hdf5 >=1.14
@@ -126,7 +126,6 @@ outputs:
       host:
         - libboost-headers
         - fmt
-        - eigen
         - yaml-cpp
         - sundials <8
         - pywin32  # [win]
@@ -139,9 +138,11 @@ outputs:
         - llvm-openmp  # [osx]
         - libgomp      # [linux]
       run:
-        - eigen
+        - eigen-abi-devel
         - fmt
         - {{ pin_subpackage('libcantera', exact=True) }}
+      run_exports:
+        - ${{ pin_compatible('eigen-abi', upper_bound='x.x.x.x') }}
     test:
       requires:
         - cmake
