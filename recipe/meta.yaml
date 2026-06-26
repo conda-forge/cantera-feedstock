@@ -14,7 +14,7 @@ source:
     folder: data/example_data
 
 build:
-  number: 0
+  number: 1
   include_recipe: True
   script_env:
     - "CT_GIT_COMMIT=4a8358eb80cfeb50474386b5f9ec0b3a83519889"
@@ -40,7 +40,8 @@ requirements:
     - ruamel.yaml
   host:
     - python >=3.10
-    - numpy
+    - numpy <2.4  # [py==314]
+    - numpy       # [py!=314]
     - libboost-devel
     - fmt
     - eigen
@@ -150,7 +151,8 @@ outputs:
         - pkgconfig
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        - numpy
+        - numpy <2.4  # [py==314]
+        - numpy       # [py!=314]
         - python
       files:
         - test-lib
@@ -170,7 +172,8 @@ outputs:
         - cross-python_{{ target_platform }}     # [build_platform != target_platform]
         # These are needed to support cross-compiling. See
         # https://conda-forge.org/docs/maintainer/knowledge_base/#details-about-cross-compiled-python-packages
-        - numpy                                  # [build_platform != target_platform]
+        - numpy <2.4                             # [build_platform != target_platform and py==314]
+        - numpy                                  # [build_platform != target_platform and py!=314]
         - cython                                 # [build_platform != target_platform]
         - {{ compiler('c') }}
         - {{ stdlib("c") }}
@@ -184,7 +187,8 @@ outputs:
         - setuptools
         - packaging
         - libboost-headers
-        - numpy
+        - numpy <2.4  # [py==314]
+        - numpy       # [py!=314]
         - fmt
         - eigen
         - yaml-cpp
@@ -206,6 +210,10 @@ outputs:
         - libgomp      # [linux]
       run:
         - python
+        # numpy is otherwise pulled in only via its run-export, which allows any
+        # 2.x; cap it on 3.14 where numpy 2.4 breaks the test suite (temporary).
+        - numpy <2.4  # [py==314]
+        - typing_extensions >=4.13.0
         - ruamel.yaml
         - {{ pin_subpackage('libcantera', exact=True) }}
     build:
@@ -221,6 +229,7 @@ outputs:
     test:
       requires:
         - pytest
+        - pip
         - pint
         - {{ pin_subpackage('libcantera-devel', exact=True) }}
         - cmake
@@ -237,6 +246,7 @@ outputs:
       files:
         - test-lib
       commands:
+        - pip check
         - cat ${CONDA_PREFIX}/conda-meta/cantera-*.json  # [not win]
         - type %CONDA_PREFIX%\conda-meta\cantera-*.json  # [win]
         - uname -a  # [not win]
