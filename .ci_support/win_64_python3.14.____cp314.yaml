@@ -9,7 +9,7 @@ channel_targets:
 cxx_compiler:
 - vs2022
 fmt:
-- '12.0'
+- '12.1'
 libboost_devel:
 - '1.88'
 libboost_headers:
